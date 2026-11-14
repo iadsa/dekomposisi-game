@@ -1,0 +1,24 @@
+/* Gaya tambahan di luar Tailwind (CDN tidak memproses berkas CSS sendiri).
+   Isinya: jarak aman layar berponsel berponi, animasi, dan penghormatan pada pengaturan "kurangi gerak". */
+
+#app {
+  padding: calc(1rem + env(safe-area-inset-top, 0px)) 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+[data-a] { cursor: pointer; }
+[data-a][disabled] { cursor: default; }
+
+@keyframes sh {
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+@keyframes pop {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+/* Animasi hanya jalan bila pengguna tidak meminta gerak dikurangi. */
+@media (prefers-reduced-motion: no-preference) {
+  .anim-sh  { animation: sh .3s; }
+  .anim-pop { animation: pop .4s both; }
+}
