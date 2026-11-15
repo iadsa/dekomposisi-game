@@ -9,6 +9,9 @@ const KOLOM = {
   Skor: ["waktu","kode","tahap","tp","persen","bintang","xp"]
 };
 
+const SHEET_ID = "1VuDOnZYTl5osdKNwO0O6016JT-jJKODGPmoOpz_QPhU";
+const ss = () => SpreadsheetApp.openById(SHEET_ID); // script standalone: getActiveSpreadsheet() selalu null
+
 const aman = v => /^[=+\-@]/.test(String(v)) ? "'" + v : v; // cegah formula injection
 const json = s => ContentService.createTextOutput(s).setMimeType(ContentService.MimeType.JSON);
 
@@ -19,8 +22,7 @@ function doPost(e) {
     const d = JSON.parse(e.postData.contents);
     const nama = d.tipe === "skor" ? "Skor" : d.tipe === "log" ? "Log" : null;
     if (!nama) return ContentService.createTextOutput("ERR tipe");
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sh = ss.getSheetByName(nama) || ss.insertSheet(nama);
+    const sh = ss().getSheetByName(nama) || ss().insertSheet(nama);
     if (sh.getLastRow() === 0) {
       sh.appendRow(KOLOM[nama]);
       sh.getRange("B:B").setNumberFormat("@"); // kode siswa tetap berupa teks (mis. 07)
@@ -40,7 +42,7 @@ function doGet(e) {
     const cache = CacheService.getScriptCache();
     const c = cache.get("rank");
     if (c) return json(c);
-    const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Skor");
+    const sh = ss().getSheetByName("Skor");
     const terbaik = {};
     if (sh && sh.getLastRow() > 1) {
       sh.getRange(2, 1, sh.getLastRow() - 1, 7).getValues().forEach(r => {

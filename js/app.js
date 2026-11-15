@@ -65,13 +65,14 @@ async function flush() {
     kirimBerjalan = false;
 }
 async function muatPeringkat() {
-    S = { v: 'rank', rank: null };
+    S = { v: 'rank', rank: null, rankErr: false };
     draw();
     try {
         const r = await fetch(API_URL + '?aksi=peringkat');
         S.rank = await r.json();
     } catch (_) {
         S.rank = [];
+        S.rankErr = true;
     }
     draw();
 }
@@ -361,7 +362,15 @@ function vMap() {
 
 function vRank() {
     const r = S.rank;
-    return `<div class="${K.card}"><h2 class="text-xl font-semibold mb-2">Peringkat XP</h2>${r === null ? '<p>Memuat…</p>' : r.length ? `<ol class="pl-5 list-decimal">${r.map((x) => `<li class="${x.kode === P.kode ? 'font-semibold' : ''}">${esc(x.kode)}: ${x.xp} XP</li>`).join('')}</ol>` : `<p class="${K.mut}">Belum ada data atau koneksi gagal.</p>`}</div><button class="${K.pr}" data-a="map">Kembali ke peta</button>`;
+    const isi =
+        r === null
+            ? '<p>Memuat…</p>'
+            : S.rankErr
+              ? `<p class="${K.mut}">Gagal memuat peringkat. Periksa koneksi lalu coba lagi.</p><button class="${K.btn}" data-a="rank">Coba lagi</button>`
+              : r.length
+                ? `<ol class="pl-5 list-decimal">${r.map((x) => `<li class="${x.kode === P.kode ? 'font-semibold' : ''}">${esc(x.kode)}: ${x.xp} XP</li>`).join('')}</ol>`
+                : `<p class="${K.mut}">Belum ada data. Selesaikan satu tahap untuk masuk peringkat.</p>`;
+    return `<div class="${K.card}"><h2 class="text-xl font-semibold mb-2">Peringkat XP</h2>${isi}</div><button class="${K.pr}" data-a="map">Kembali ke peta</button>`;
 }
 
 function vPlay() {
