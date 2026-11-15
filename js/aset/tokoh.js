@@ -18,12 +18,17 @@ const IK = {
     rank: '<rect x="3" y="12" width="5" height="8" rx="1"/><rect x="9.5" y="5" width="5" height="15" rx="1"/><rect x="16" y="14" width="5" height="6" rx="1"/>',
     orang: '<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-4 3.8-5.5 7-5.5s6.2 1.5 7 5.5"/>',
     pecah: '<rect x="3.5" y="3.5" width="9" height="9" rx="1.5"/><rect x="15" y="3.5" width="5.5" height="5.5" rx="1.5"/><rect x="15" y="11.5" width="5.5" height="9" rx="1.5"/><rect x="3.5" y="15" width="9" height="5.5" rx="1.5"/>',
-    kelompok: '<rect x="3" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="8" y="13.5" width="8" height="7" rx="1.5"/>',
+    kelompok:
+        '<rect x="3" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="8" y="13.5" width="8" height="7" rx="1.5"/>',
     urut: '<path d="M3 20h5.5v-5.5H14V9h5.5V4.5"/><path d="M16.5 7.5l3-3 3 3" transform="translate(-1.5 0)"/>',
     lup: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>',
     pohon: '<rect x="8.5" y="3" width="7" height="5" rx="1.2"/><rect x="2.5" y="16" width="7" height="5" rx="1.2"/><rect x="14.5" y="16" width="7" height="5" rx="1.2"/><path d="M12 8v4M6 16v-4h12v4"/>',
     bendera: '<path d="M6 21V4M6 5h11l-2 4 2 4H6"/>',
     ulang: '<path d="M4.5 12a7.5 7.5 0 0 1 13-5l2 2M19.5 4v5h-5M19.5 12a7.5 7.5 0 0 1-13 5l-2-2M4.5 20v-5h5"/>',
+    bulan: '<path d="M20 14.6A8.6 8.6 0 0 1 9.4 4 8.6 8.6 0 1 0 20 14.6z"/>',
+    matahari: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/>',
+    gear: '<circle cx="12" cy="12" r="3.1"/><path d="M19.2 14.9a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1h.2a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>',
+    piala: '<path d="M8 3.5h8v4.2a4 4 0 0 1-8 0z"/><path d="M8 4.8H5.4a2.4 2.4 0 0 0 2.6 3.9M16 4.8h2.6a2.4 2.4 0 0 1-2.6 3.9"/><path d="M12 11.7v3.1M9.4 20.5h5.2M10.2 20.5l.5-5.7h2.6l.5 5.7"/>',
 };
 // Ikon alat tiap tahap, urut sesuai STAGES.
 const IKON_TAHAP = ['pecah', 'kelompok', 'urut', 'lup', 'pohon'];
@@ -46,8 +51,9 @@ function logo(u) {
    Ciri khas Bayu: kacamata bulat, jambul, alis tebal, celana panjang biru tua.
    Ciri khas Rani: dua kepang dengan ikat kuning, rok biru tua, kaus kaki putih. */
 const TOKOH = {
-    bayu: { nama: 'Bayu', kulit: '#D3996B', bayang: '#B97F53', bahu: 25 },
-    rani: { nama: 'Rani', kulit: '#E3B38A', bayang: '#C99870', bahu: 22 },
+    arlin: { nama: 'Arlin', kulit: '#E3B38A', bayang: '#C99870', bahu: 22 },
+    yogi: { nama: 'Yogi', kulit: '#D3996B', bayang: '#B97F53', bahu: 25 },
+    adsa: { nama: 'Adsa', kulit: '#D8A882', bayang: '#BE8E68', bahu: 24 },
 };
 const RAMBUT = '#1A2142',
     SERAGAM = '#FFFFFF',
@@ -59,17 +65,72 @@ function anggota(d, warna, lebar) {
 }
 // Titik lengan: bahu, siku, tangan. Sisi kiri/kanan dilihat dari penonton.
 const POSE = {
-    diam: { L: [[27, 79], [21, 99], [21, 120]], R: [[73, 79], [79, 99], [79, 120]] },
-    sorak: { L: [[27, 79], [14, 66], [10, 42]], R: [[73, 79], [86, 66], [90, 42]] },
-    tunjuk: { L: [[27, 79], [21, 99], [21, 120]], R: [[73, 79], [88, 84], [104, 72]] },
-    lambai: { L: [[27, 79], [21, 99], [21, 120]], R: [[73, 79], [87, 68], [90, 46]] },
-    buku: { L: [[27, 79], [24, 100], [40, 108]], R: [[73, 79], [76, 100], [60, 108]] },
+    diam: {
+        L: [
+            [27, 79],
+            [21, 99],
+            [21, 120],
+        ],
+        R: [
+            [73, 79],
+            [79, 99],
+            [79, 120],
+        ],
+    },
+    sorak: {
+        L: [
+            [27, 79],
+            [14, 66],
+            [10, 42],
+        ],
+        R: [
+            [73, 79],
+            [86, 66],
+            [90, 42],
+        ],
+    },
+    tunjuk: {
+        L: [
+            [27, 79],
+            [21, 99],
+            [21, 120],
+        ],
+        R: [
+            [73, 79],
+            [88, 84],
+            [104, 72],
+        ],
+    },
+    lambai: {
+        L: [
+            [27, 79],
+            [21, 99],
+            [21, 120],
+        ],
+        R: [
+            [73, 79],
+            [87, 68],
+            [90, 46],
+        ],
+    },
+    buku: {
+        L: [
+            [27, 79],
+            [24, 100],
+            [40, 108],
+        ],
+        R: [
+            [73, 79],
+            [76, 100],
+            [60, 108],
+        ],
+    },
 };
 
 function wajah(w, ex) {
     const t = TOKOH[w],
-        alisTebal = w === 'bayu' ? 3.2 : 2.4,
-        ya = w === 'bayu' ? 31 : 33;
+        alisTebal = w === 'yogi' ? 3.2 : 2.4,
+        ya = w === 'yogi' ? 31 : 33;
     const alis = (a, b, c, d) =>
         `<path d="M${a} ${b}L${c} ${d}" stroke="${RAMBUT}" stroke-width="${alisTebal}" stroke-linecap="round"/>`;
     let ab = '',
@@ -102,7 +163,7 @@ function wajah(w, ex) {
     }
     const hidung = `<path d="M49 46.5q-1.6 3 1.2 3.2" fill="none" stroke="${t.bayang}" stroke-width="1.6" stroke-linecap="round"/>`;
     const kacamata =
-        w === 'bayu'
+        w === 'yogi'
             ? `<g fill="rgba(255,255,255,.28)" stroke="${TINTA}" stroke-width="2"><circle cx="40" cy="42" r="8.6"/><circle cx="60" cy="42" r="8.6"/></g><path d="M48.6 41.5h2.8" stroke="${TINTA}" stroke-width="2"/>`
             : '';
     return kacamata + ab + mata + hidung + mulut;
@@ -112,22 +173,28 @@ function wajah(w, ex) {
 function tokohG(w, o) {
     o = o || {};
     const t = TOKOH[w],
-        rani = w === 'rani',
+        arlin = w === 'arlin',
+        yogi = w === 'yogi',
+        adsa = w === 'adsa',
         pose = POSE[o.pose] || POSE.diam,
         bahu = t.bahu;
     let s = '';
     // Kaki dan bawahan
-    if (rani) {
-        s += anggota('M38 148V164', t.kulit, 9) + anggota('M62 148V164', t.kulit, 9);
+    if (arlin) {
+        s +=
+            anggota('M38 148V164', t.kulit, 9) +
+            anggota('M62 148V164', t.kulit, 9);
         s += `<path d="M30 116h40l5 36H25z" fill="${BIRU_TUA}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
-        s += anggota('M38 158V172', '#fff', 9) + anggota('M62 158V172', '#fff', 9);
+        s +=
+            anggota('M38 158V172', '#fff', 9) +
+            anggota('M62 158V172', '#fff', 9);
     } else {
         s += `<path d="M31 116h38l-1 54H52l-2-38-2 38H32z" fill="${BIRU_TUA}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
         s += `<path d="M50 132v36" stroke="${TINTA}" stroke-width="1.6"/>`;
     }
     const sepatu = (x) =>
         `<path d="M${x - 8} 184q0-9 6-10h8q4 1 5 5l2 5z" fill="#1B1F3A" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
-    s += sepatu(rani ? 38 : 41) + sepatu(rani ? 66 : 69);
+    s += sepatu(arlin ? 38 : 41) + sepatu(arlin ? 66 : 69);
     // Badan
     s += `<path d="M${50 - bahu} 80q0-12 11-14h28q11 2 11 14l-2 40H${52 - bahu}z" fill="${SERAGAM}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
     s += `<rect x="${50 - bahu + 3}" y="114" width="${2 * bahu - 6}" height="6" fill="${BIRU_TUA}" stroke="${TINTA}" stroke-width="1.6"/>`;
@@ -135,6 +202,11 @@ function tokohG(w, o) {
     // Leher dan kerah
     s += `<path d="M44 58h12v14q-6 6-12 0z" fill="${t.bayang}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
     s += `<path d="M41 67l9 12 9-12-4-3-5 5-5-5z" fill="#fff" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
+    // Dasi (khusus Adsa)
+    if (adsa) {
+        s += `<path d="M50 67l-6 8 4 28h4l4-28z" fill="#1F4FD8" stroke="${TINTA}" stroke-width="1.8" stroke-linejoin="round"/>`;
+        s += `<path d="M44 67h12l-2 4h-8z" fill="#1F4FD8" stroke="${TINTA}" stroke-width="1.8" stroke-linejoin="round"/>`;
+    }
     // Lengan
     const lengan = (sisi) => {
         const [b, e, h] = pose[sisi];
@@ -151,8 +223,8 @@ function tokohG(w, o) {
     if (o.pose === 'buku')
         s += `<rect x="34" y="94" width="32" height="24" rx="3" fill="#1F4FD8" stroke="${TINTA}" stroke-width="2"/><path d="M40 102h20M40 108h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>`;
     s += tangan('L') + tangan('R');
-    // Kepang Rani (di depan bahu)
-    if (rani) {
+    // Kepang Arlin (di depan bahu)
+    if (arlin) {
         s += anggota('M27 46Q18 62 24 84', RAMBUT, 9);
         s += anggota('M73 46Q82 62 76 84', RAMBUT, 9);
         s += `<circle cx="24" cy="86" r="4.2" fill="${PENSIL}" stroke="${TINTA}" stroke-width="1.8"/><circle cx="76" cy="86" r="4.2" fill="${PENSIL}" stroke="${TINTA}" stroke-width="1.8"/>`;
@@ -161,11 +233,12 @@ function tokohG(w, o) {
     s += `<ellipse cx="25" cy="42" rx="4.5" ry="6" fill="${t.kulit}" stroke="${TINTA}" stroke-width="2"/><ellipse cx="75" cy="42" rx="4.5" ry="6" fill="${t.kulit}" stroke="${TINTA}" stroke-width="2"/>`;
     s += `<ellipse cx="50" cy="38" rx="25" ry="26" fill="${t.kulit}" stroke="${TINTA}" stroke-width="2"/>`;
     // Rambut
-    if (rani) {
+    if (arlin) {
         s += `<path d="M24.5 40Q20 9 50 9Q80 9 75.5 40Q73 27 60 22Q44 29 33 33Q27 35 24.5 40Z" fill="${RAMBUT}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
     } else {
         s += `<path d="M24.5 38Q20 10 50 10Q80 10 75.5 38Q73 27 64 25Q56 29 50 24Q42 29 36 25Q27 27 24.5 38Z" fill="${RAMBUT}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
-        s += `<path d="M44 12Q48 1 58 5Q52 7 54 13Z" fill="${RAMBUT}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
+        if (yogi)
+            s += `<path d="M44 12Q48 1 58 5Q52 7 54 13Z" fill="${RAMBUT}" stroke="${TINTA}" stroke-width="2" stroke-linejoin="round"/>`;
     }
     s += wajah(w, o.ex);
     return s;
@@ -204,5 +277,5 @@ function adegan(ringkas) {
         ? ''
         : `<g><rect x="24" y="96" width="132" height="300" fill="#DCE8FF" stroke="${TINTA}" stroke-width="2.5" stroke-linejoin="round"/><path d="M118 226L98 262L126 304L104 340L120 396" fill="none" stroke="${TINTA}" stroke-width="2.5" stroke-linejoin="round"/><text x="38" y="128" font-size="10.5" font-weight="800" letter-spacing=".8" fill="#1F4FD8" style="font-family:var(--f-b)">MASALAH BESAR</text><text x="38" y="152" font-size="16" font-weight="800" fill="${TINTA}" style="font-family:var(--f-d)">Membuat</text><text x="38" y="171" font-size="16" font-weight="800" fill="${TINTA}" style="font-family:var(--f-d)">poster kelas</text></g>`;
     const vb = ringkas ? '140 0 500 410' : '0 0 640 420';
-    return `<svg class="adegan" viewBox="${vb}" role="img" aria-label="Bayu dan Rani mengubah satu masalah besar menjadi empat anak tangga: tentukan pesan, rancang tata letak, buat gambar dan teks, periksa hasil."><line x1="${ringkas ? 140 : 0}" y1="${dasar}" x2="640" y2="${dasar}" stroke="${TINTA}" stroke-width="2.5" stroke-linecap="round"/>${dinding}${tangga}<g transform="translate(${ringkas ? 150 : 146} ${dasar - 134}) scale(.7)">${tokohG('bayu', { pose: 'tunjuk', ex: 'mikir' })}</g><g transform="translate(${x0 + 3 * lb + 12} ${dasar - 256 - 134}) scale(.7)">${tokohG('rani', { pose: 'lambai', ex: 'senang' })}</g></svg>`;
+    return `<svg class="adegan" viewBox="${vb}" role="img" aria-label="Yogi dan Arlin mengubah satu masalah besar menjadi empat anak tangga: tentukan pesan, rancang tata letak, buat gambar dan teks, periksa hasil."><line x1="${ringkas ? 140 : 0}" y1="${dasar}" x2="640" y2="${dasar}" stroke="${TINTA}" stroke-width="2.5" stroke-linecap="round"/>${dinding}${tangga}<g transform="translate(${ringkas ? 150 : 146} ${dasar - 134}) scale(.7)">${tokohG('yogi', { pose: 'tunjuk', ex: 'mikir' })}</g><g transform="translate(${x0 + 3 * lb + 12} ${dasar - 256 - 134}) scale(.7)">${tokohG('arlin', { pose: 'lambai', ex: 'senang' })}</g></svg>`;
 }

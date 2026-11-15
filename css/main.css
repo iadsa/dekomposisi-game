@@ -1,0 +1,536 @@
+/* ---------- Bermain ---------- */
+.main {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+}
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+}
+.segmen {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+    min-width: 0;
+}
+.segmen i {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--line);
+    transition: background-color 0.25s ease-out;
+}
+.segmen i.s {
+    background: var(--blue);
+}
+.segmen i.k {
+    background: var(--ink3);
+}
+.nyawa {
+    display: flex;
+    gap: 2px;
+    color: var(--no);
+}
+.nyawa .hl {
+    color: var(--line);
+}
+.isi-main {
+    flex: 1;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 16px 28px;
+}
+.meta-soal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+    font: 700 12px var(--f-b);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink3);
+}
+.combo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--ink);
+    background: var(--pencil);
+    border-radius: 6px;
+    padding: 3px 8px;
+    letter-spacing: 0.03em;
+}
+.tanya {
+    font: 800 clamp(21px, 5.4vw, 28px)/1.25 var(--f-d);
+    letter-spacing: -0.015em;
+    margin: 8px 0 18px;
+    max-width: 30ch;
+    text-wrap: balance;
+}
+.refl {
+    color: var(--blue);
+}
+.petunjuk {
+    font-size: 14px;
+    color: var(--ink2);
+    margin-bottom: 12px;
+}
+.petunjuk b {
+    color: var(--ink);
+}
+.area {
+    display: grid;
+    gap: 10px;
+}
+
+.opsi {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 10px 14px 10px 10px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    transition:
+        border-color 0.12s,
+        background-color 0.12s,
+        transform 0.12s ease-out;
+}
+.opsi:hover:not([disabled]) {
+    border-color: var(--blue);
+}
+.opsi:active:not([disabled]) {
+    transform: translateY(1px);
+}
+.opsi .hrf {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font: 800 15px var(--f-d);
+    border: 2px solid var(--line);
+    color: var(--ink2);
+}
+.opsi.kotak .hrf {
+    border-radius: 6px;
+}
+.opsi.on {
+    border-color: var(--blue);
+    background: var(--blue-xl);
+}
+.opsi.on .hrf {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+}
+.opsi.ok {
+    border-color: var(--ok);
+    background: var(--ok-bg);
+}
+.opsi.ok .hrf {
+    background: var(--ok);
+    border-color: var(--ok);
+    color: var(--paper);
+}
+.opsi.no {
+    border-color: var(--no);
+    background: var(--no-bg);
+}
+.opsi.no .hrf {
+    background: var(--no);
+    border-color: var(--no);
+    color: var(--paper);
+}
+.opsi[disabled] {
+    opacity: 1;
+}
+
+/* Kelompok */
+.kartu {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.25;
+    box-shadow: 0 3px 0 var(--ink);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+}
+.kartu.on {
+    background: var(--blue-l);
+    border-color: var(--blue);
+    box-shadow: 0 3px 0 var(--blue);
+}
+.kartu.ok {
+    background: var(--ok-bg);
+    border-color: var(--ok);
+    box-shadow: none;
+}
+.kartu.no {
+    background: var(--no-bg);
+    border-color: var(--no);
+    box-shadow: none;
+}
+.kartu.dalam {
+    box-shadow: none;
+    border-width: 2px;
+    min-height: 40px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+.dragging {
+    position: relative;
+    z-index: 50;
+    pointer-events: none;
+    box-shadow: 0 10px 18px rgba(11, 31, 75, 0.28);
+    cursor: grabbing;
+}
+.pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 52px;
+    margin-bottom: 18px;
+}
+.pool .kosong {
+    font-size: 14px;
+    color: var(--ink3);
+    align-self: center;
+}
+.zonas {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.zona {
+    border: 2px dashed var(--ink3);
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 92px;
+    background: transparent;
+    transition:
+        background-color 0.12s,
+        border-color 0.12s;
+}
+.zona h4 {
+    font: 800 16px var(--f-d);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    align-items: center;
+}
+.zona .isi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.zona.siap {
+    border-style: solid;
+    border-color: var(--blue);
+    cursor: pointer;
+}
+.zona.over {
+    background: var(--blue-l);
+    border-style: solid;
+    border-color: var(--blue);
+}
+.taruh {
+    font: 700 12px var(--f-b);
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    min-height: 32px;
+}
+
+/* Urutan */
+.urut {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    counter-reset: u;
+}
+.urut.drop {
+    border-radius: 8px;
+    transition: background-color 0.12s;
+}
+.urut.over {
+    background: var(--blue-xl);
+}
+.slot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 50px;
+    padding: 4px 0;
+}
+.slot::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: -10px;
+    width: 2px;
+    height: 14px;
+    background: var(--ink3);
+}
+.slot:first-child::before {
+    display: none;
+}
+.slot .no-u {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    font: 800 15px var(--f-d);
+    border: 2px dashed var(--ink3);
+    color: var(--ink3);
+}
+.slot.isi .no-u {
+    background: var(--blue);
+    border: 2px solid var(--blue);
+    color: #fff;
+}
+.slot .tx {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px dashed var(--line);
+    color: var(--ink3);
+    font-size: 14px;
+}
+.slot.isi .tx {
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 15px;
+}
+.slot:not(:first-child) {
+    margin-top: 12px;
+}
+.slot:not(:first-child)::before {
+    top: -14px;
+    height: 14px;
+}
+.ulang {
+    margin-top: 14px;
+    min-height: 44px;
+}
+
+/* Pohon pecah */
+.pohon {
+    margin-top: 4px;
+}
+.nd {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 6px 8px 6px 12px;
+    border-radius: 8px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    font-weight: 700;
+    line-height: 1.3;
+}
+.nd .teks {
+    flex: 1;
+}
+.nd.akar {
+    background: var(--blue);
+    border-color: var(--blue-d);
+    color: #fff;
+    font: 800 17px/1.25 var(--f-d);
+}
+.nd.besar {
+    border-style: dashed;
+    border-color: var(--blue);
+    background: var(--blue-xl);
+}
+.nd.pecah-sdh {
+    background: var(--paper);
+    border-color: var(--line);
+    color: var(--ink2);
+}
+.nd .tnd {
+    width: 22px;
+    display: grid;
+    place-items: center;
+    color: var(--ok);
+    flex: none;
+}
+.nd .tnd.dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--blue);
+}
+.nd.akar .tnd {
+    color: #fff;
+}
+.nd .btn {
+    min-height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
+    border-color: var(--blue);
+    color: var(--blue);
+}
+.nd .btn:hover {
+    background: var(--blue-l);
+}
+.anak {
+    margin-left: 18px;
+    padding-left: 18px;
+    border-left: 2px solid var(--ink3);
+    padding-top: 8px;
+    display: grid;
+    gap: 8px;
+}
+.anak > .cb {
+    position: relative;
+}
+.anak > .cb::before {
+    content: '';
+    position: absolute;
+    left: -18px;
+    top: 25px;
+    width: 18px;
+    height: 2px;
+    background: var(--ink3);
+}
+.cara {
+    margin: 8px 0 4px;
+    padding: 10px;
+    border: 2px solid var(--blue);
+    border-radius: 8px;
+    background: var(--paper);
+    display: grid;
+    gap: 8px;
+}
+.cara > p {
+    font: 700 12px var(--f-b);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue);
+}
+.cara .opsi {
+    grid-template-columns: 1fr;
+    min-height: 48px;
+    padding: 8px 12px;
+    font-size: 15px;
+}
+
+/* Dock pemandu di bawah */
+.dock {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: var(--paper);
+    border-top: 2px solid var(--ink);
+    transition: background-color 0.2s;
+}
+.dock.ok {
+    background: var(--ok-bg);
+}
+.dock.no {
+    background: var(--no-bg);
+}
+.dock.try {
+    background: var(--try-bg);
+}
+.dock-in {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 4px 12px;
+    align-items: center;
+}
+.dock .pemandu {
+    align-self: end;
+    margin-top: -34px;
+}
+.dock .pemandu svg {
+    width: 60px;
+    display: block;
+}
+.dock .ucap {
+    font-size: 15px;
+    line-height: 1.45;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+.dock .ucap b {
+    font-weight: 800;
+}
+.dock .ucap span {
+    display: block;
+}
+.dock.ok .ucap b {
+    color: var(--ok);
+}
+.dock.no .ucap b {
+    color: var(--no);
+}
+.dock .btn {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    width: 100%;
+}
+.dock.ok .btn.pr {
+    background: var(--ok);
+    border-color: #0a4d27;
+    box-shadow: 0 4px 0 #0a4d27;
+}
+.dock.no .btn.pr {
+    background: var(--no);
+    border-color: #7c1810;
+    box-shadow: 0 4px 0 #7c1810;
+}
+[data-tema='gelap'] .dock.ok .btn.pr,
+[data-tema='gelap'] .dock.no .btn.pr {
+    color: #0a1128;
+}
+@media (min-width: 720px) {
+    .dock .btn {
+        grid-column: auto;
+        width: auto;
+        margin: 0;
+        min-width: 150px;
+    }
+    .dock-in {
+        grid-template-columns: 60px 1fr auto;
+    }
+}
+

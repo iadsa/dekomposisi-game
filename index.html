@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-tema="terang">
     <head>
         <meta charset="utf-8" />
         <meta
@@ -19,13 +19,24 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap"
         />
-        <link rel="stylesheet" href="css/style.css" />
+        <!-- Urutan gaya: dasar (token) → komponen → per layar. -->
+        <link rel="stylesheet" href="css/dasar.css" />
+        <link rel="stylesheet" href="css/komponen.css" />
+        <link rel="stylesheet" href="css/beranda.css" />
+        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="css/akhir.css" />
     </head>
     <body>
         <div id="app"></div>
         <div id="sr" class="sr" aria-live="polite"></div>
-        <script src="js/soal.js"></script>
-        <script src="js/tokoh.js"></script>
-        <script src="js/app.js"></script>
+        <!-- Urutan skrip berpengaruh: data & gambar dulu, lalu inti, aturan, dan terakhir
+             tampilan (berkas terakhir yang memanggil draw()). -->
+        <script src="js/aset/soal.js"></script>
+        <script src="js/aset/tokoh.js"></script>
+        <script src="js/inti.js"></script>
+        <script src="js/game.js"></script>
+        <script src="js/ui/soal.js"></script>
+        <script src="js/ui/layar.js"></script>
+        <script src="js/ui/gambar.js"></script>
     </body>
 </html>

@@ -1,0 +1,125 @@
+/* Pecah Masalah — identitas visual: kertas putih, tinta biru tua, biru pena, kuning pensil (hanya untuk bintang/sorotan).
+   Bentuk: blok bersudut kecil seperti kertas; tombol utama punya "tepi" tebal di bawah, tanpa glow. */
+
+:root {
+    --f-d: 'Bricolage Grotesque', 'Poppins', system-ui, sans-serif;
+    --f-b: 'Figtree', 'Inter', system-ui, sans-serif;
+    --bg: #f3f7ff;
+    --paper: #ffffff;
+    --ink: #0b1f4b;
+    --ink2: #3f527a;
+    --ink3: #5f7196;
+    --line: #c9d6f2;
+    --blue: #1f4fd8;
+    --blue-d: #14349a;
+    --blue-l: #dce8ff;
+    --blue-xl: #eef4ff;
+    --ok: #12703a;
+    --ok-bg: #e3f4e9;
+    --no: #b4291f;
+    --no-bg: #fdece9;
+    --try-bg: #fff4d2;
+    --pencil: #f5b72b;
+    --grid: rgba(31, 79, 216, 0.07);
+    --top: 60px;
+    color-scheme: light;
+}
+/* Tema terang adalah bawaan. Tema gelap hanya dipakai kalau dipilih:
+   <html data-tema="gelap">. */
+:root[data-tema='gelap'] {
+    --bg: #0a1128;
+    --paper: #111b3b;
+    --ink: #eaf0ff;
+    --ink2: #b8c6e8;
+    --ink3: #93a5cc;
+    --line: #2a3b6b;
+    --blue: #5b86ff;
+    --blue-d: #2f55c8;
+    --blue-l: #1b2c5e;
+    --blue-xl: #15224a;
+    --ok: #6fdc9a;
+    --ok-bg: #12331f;
+    --no: #ff9a8f;
+    --no-bg: #3a1a1a;
+    --try-bg: #3a3014;
+    --grid: rgba(143, 176, 245, 0.07);
+    color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+html {
+    scrollbar-width: none;
+    -webkit-text-size-adjust: 100%;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 500 16px/1.55 var(--f-b);
+    -webkit-font-smoothing: antialiased;
+}
+body[data-v='login'],
+body[data-v='map'],
+body[data-v='hasil'],
+body[data-v='habis'] {
+    background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+button,
+input {
+    font: inherit;
+    color: inherit;
+}
+button {
+    cursor: pointer;
+    background: none;
+    border: 0;
+    padding: 0;
+    text-align: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+button[disabled] {
+    cursor: default;
+}
+h1,
+h2,
+h3,
+h4,
+p {
+    margin: 0;
+}
+:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+}
+.sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+.ic,
+.bt {
+    flex: none;
+    display: block;
+}
+.bt {
+    fill: transparent;
+    stroke: var(--line);
+}
+.bt.penuh {
+    fill: var(--pencil);
+    stroke: var(--ink);
+}
+
