@@ -2,7 +2,7 @@
 // karena tampilan dibuat oleh JavaScript. Bank soal ada di js/soal.js.
 
 /* ===== PENGATURAN ===== */
-const API_URL="https://script.google.com/macros/s/AKfycbwzOwpU-Ol-9dQPLjjiiUZ10nu2_fxv-91_-3-MFgmP1Q1rAE7ZVZHJ2EE_hbgxWGN7/exec";   // URL Web App dari Apps Script
+const API_URL= "https://script.google.com/macros/s/AKfycbwzOwpU-Ol-9dQPLjjiiUZ10nu2_fxv-91_-3-MFgmP1Q1rAE7ZVZHJ2EE_hbgxWGN7/exec";   // URL Web App dari Apps Script
 const BADGES=["Pemecah","Pengelompok","Penyusun","Pemeriksa","Perancang"];
 
 /* ===== KELAS TAILWIND ===== */
