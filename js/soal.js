@@ -18,7 +18,7 @@ const STAGES = [
     {
         n: "Kenali",
         alat: "Tombol “Pecah”",
-        info: "Masalah besar bisa dipecah menjadi bagian kecil. Pilih pemecahan yang paling tepat.",
+        info: "Masalah besar bisa dipecah menjadi bagian kecil. Pecah sampai setiap bagian bisa langsung dikerjakan.",
         qs: [
             {
                 t: "choice",
@@ -32,26 +32,60 @@ const STAGES = [
                 k: "Pemecahan yang baik menyebut bagian yang jelas dan berurutan, bukan tujuan yang kabur."
             },
             {
-                t: "choice",
-                p: "Masalah: “Menyiapkan makan malam untuk keluarga.” Mana pemecahan yang paling tepat?",
-                o: [
-                    "Memasak makanan",
-                    "Memilih menu, belanja bahan, memasak, lalu menyajikan",
-                    "Belanja bahan makanan"
-                ],
-                a: 1,
-                k: "Pilihan pertama terlalu umum, pilihan ketiga melewatkan langkah penting."
+                // Tipe split: n.o = beberapa cara memecah, hanya satu yang punya kids.
+                // Node yang punya kids masih bisa dipecah lagi (rekursif).
+                t: "split",
+                p: "Masalah: “Menyiapkan makan malam untuk keluarga.” Pecah sampai setiap bagian bisa langsung dikerjakan.",
+                r: {
+                    l: "Menyiapkan makan malam",
+                    o: [
+                        { l: "Memasak makanan" },
+                        {
+                            l: "Memilih menu · belanja bahan · memasak · menyajikan",
+                            kids: [
+                                { l: "Memilih menu" },
+                                { l: "Belanja bahan" },
+                                {
+                                    l: "Memasak",
+                                    o: [
+                                        { l: "Langsung menyalakan kompor" },
+                                        {
+                                            l: "Siapkan bahan · olah bahan · masak · cicipi",
+                                            kids: [
+                                                { l: "Siapkan bahan" },
+                                                { l: "Olah bahan" },
+                                                { l: "Masak" },
+                                                { l: "Cicipi" }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                { l: "Menyajikan" }
+                            ]
+                        }
+                    ]
+                },
+                k: "“Memasak makanan” masih terlalu besar dan belum bisa dikerjakan langsung. Setelah dipecah, “Memasak” pun masih bisa dipecah lagi — itu gunanya dekomposisi."
             },
             {
-                t: "choice",
-                p: "Masalah: “Merencanakan lomba kebersihan kelas selama satu minggu.” Mana pemecahan yang paling tepat?",
-                o: [
-                    "Bersihkan kelas setiap hari",
-                    "Tentukan aturan penilaian, bagi regu dan jadwal, siapkan alat, lalu catat dan umumkan hasil",
-                    "Siapkan hadiah saja"
-                ],
-                a: 1,
-                k: "Masalah yang lebih besar perlu dipecah menjadi beberapa bagian yang saling melengkapi."
+                t: "split",
+                p: "Masalah: “Merencanakan lomba kebersihan kelas selama satu minggu.” Pecah sampai setiap bagian bisa langsung dikerjakan.",
+                r: {
+                    l: "Merencanakan lomba kebersihan",
+                    o: [
+                        { l: "Bersihkan kelas setiap hari" },
+                        {
+                            l: "Aturan penilaian · regu dan jadwal · alat · catat dan umumkan hasil",
+                            kids: [
+                                { l: "Aturan penilaian" },
+                                { l: "Regu dan jadwal" },
+                                { l: "Alat kebersihan" },
+                                { l: "Catat dan umumkan hasil" }
+                            ]
+                        }
+                    ]
+                },
+                k: "Masalah yang lebih besar perlu dipecah menjadi beberapa bagian yang saling melengkapi, bukan satu perintah umum."
             },
             {
                 t: "choice",

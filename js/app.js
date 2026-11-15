@@ -226,13 +226,15 @@ function rq() {
         sel: [],
         m: {},
         cur: null,
+        exp: {},
+        pilih: null,
         seq: [],
         att: 0,
         fb: '',
         ok: false,
         lock: false,
         t0: Date.now(),
-        o: acak(q.t === 'choice' ? q.o.length : q.c.length),
+        o: acak(q.t === 'choice' ? q.o.length : (q.c || []).length),
     });
 }
 const siap = (q) =>
@@ -255,6 +257,38 @@ const xp = () => Object.values(P.h).reduce((a, h) => a + h.xp, 0);
 const bintang = (n) => '★'.repeat(n) + '☆'.repeat(3 - n);
 const buka = (i) => i === 0 || (P.h[i - 1] && P.h[i - 1].b >= 1);
 
+// Satu soal selesai: kunci skor, umpan balik, dan kirim log. Dipakai semua tipe soal.
+function tutup(q, b) {
+    S.lock = true;
+    S.ok = b;
+    S.sk.push(b ? [1, 0.5, 0.25][S.att - 1] : 0);
+    S.fb = (b ? 'Tepat! ' : 'Belum tepat. ') + q.k;
+    if (b) {
+        bunyi.ok();
+        confetti(S.combo >= 3 ? 45 : 22);
+        S.mas =
+            S.combo >= 3
+                ? { e: '🔥', t: `Combo x${S.combo}! Kamu hebat!` }
+                : { e: '🤩', t: 'Tepat sekali!' };
+    } else {
+        S.hp = Math.max(0, S.hp - 1);
+        bunyi.no();
+        S.mas = {
+            e: '🥹',
+            t: 'Tidak apa-apa. Baca penjelasannya, lalu lanjut.',
+        };
+    }
+    kirim({
+        tipe: 'log',
+        kode: P.kode,
+        tahap: S.s + 1,
+        soal: S.q + 1,
+        tp: '1.1',
+        benar: b ? 1 : 0,
+        percobaan: S.att,
+        detik: Math.round((Date.now() - S.t0) / 1000),
+    });
+}
 function periksa(q) {
     S.att++;
     const b = benar(q);
@@ -262,38 +296,8 @@ function periksa(q) {
         S.combo++;
         if (S.combo >= 2) S.bonus += S.combo - 1;
     } else S.combo = 0;
-    if (b || S.att >= 3) {
-        S.lock = true;
-        S.ok = b;
-        const sk = b ? [1, 0.5, 0.25][S.att - 1] : 0;
-        S.sk.push(sk);
-        S.fb = (b ? 'Tepat! ' : 'Belum tepat. ') + q.k;
-        if (b) {
-            bunyi.ok();
-            confetti(S.combo >= 3 ? 45 : 22);
-            S.mas =
-                S.combo >= 3
-                    ? { e: '🔥', t: `Combo x${S.combo}! Kamu hebat!` }
-                    : { e: '🤩', t: 'Tepat sekali!' };
-        } else {
-            S.hp = Math.max(0, S.hp - 1);
-            bunyi.no();
-            S.mas = {
-                e: '🥹',
-                t: 'Tidak apa-apa. Baca penjelasannya, lalu lanjut.',
-            };
-        }
-        kirim({
-            tipe: 'log',
-            kode: P.kode,
-            tahap: S.s + 1,
-            soal: S.q + 1,
-            tp: '1.1',
-            benar: b ? 1 : 0,
-            percobaan: S.att,
-            detik: Math.round((Date.now() - S.t0) / 1000),
-        });
-    } else {
+    if (b || S.att >= 3) tutup(q, b);
+    else {
         bunyi.no();
         S.mas = { e: '🤔', t: 'Hampir! Coba lagi, kamu pasti bisa.' };
         S.fb =
@@ -302,6 +306,64 @@ function periksa(q) {
                 : 'Belum tepat, coba lagi.';
         if (q.t === 'order') S.seq = [];
     }
+}
+
+/* ===== POHON PECAH (tipe soal "split") =====
+   p = path menunjuk posisi node di pohon: '' akar, '.2' anak ketiga, '.2.1' cucu kedua. */
+const opsiBenar = (n) => n.o.find((o) => o.kids);
+function nodeDi(n, p) {
+    for (const i of p.split('.').filter(Boolean)) n = opsiBenar(n).kids[i];
+    return n;
+}
+function bukaSemua(n, p) {
+    if (!n.o) return;
+    S.exp[p] = true;
+    opsiBenar(n).kids.forEach((c, i) => bukaSemua(c, p + '.' + i));
+}
+function pohonSelesai(n, p) {
+    if (!n.o) return true;
+    if (!S.exp[p]) return false;
+    return opsiBenar(n).kids.every((c, i) => pohonSelesai(c, p + '.' + i));
+}
+function cabang(n, p) {
+    const buka = !!S.exp[p],
+        opsi = n.o && opsiBenar(n);
+    let h = `<div class="py-0.5"><div class="flex items-center gap-2"><span class="${n.o ? (buka ? 'text-green-600' : 'text-slate-400') : 'text-blue-600'}">${n.o ? (buka ? '✓' : '◆') : '•'}</span><span class="flex-1">${esc(n.l)}</span>${n.o && !buka && !S.lock ? `<button class="${K.btn} !px-3 !text-sm" data-a="sp" data-p="${p}">＋ Pecah</button>` : ''}</div>`;
+    if (buka)
+        h += opsi.kids
+            .map(
+                (c, i) =>
+                    `<div class="ml-2 pl-3 border-l border-slate-300 dark:border-slate-600">${cabang(c, p + '.' + i)}</div>`,
+            )
+            .join('');
+    else if (S.pilih === p)
+        h += `<div class="my-1">${n.o.map((o, i) => `<button class="${K.chip}" data-a="op" data-p="${p}" data-i="${i}">${esc(o.l)}</button>`).join('')}</div>`;
+    return h + '</div>';
+}
+function salahPecah(q) {
+    S.att++;
+    S.combo = 0;
+    if (S.att >= 3) {
+        bukaSemua(q.r, '');
+        tutup(q, false);
+        return;
+    }
+    bunyi.no();
+    S.mas = { e: '🤔', t: 'Hampir! Coba lagi, kamu pasti bisa.' };
+    S.fb =
+        S.att === 2 ? 'Belum tepat. Petunjuk: ' + q.k : 'Belum tepat, coba lagi.';
+}
+function pecah(q, p, i) {
+    const o = nodeDi(q.r, p).o[i];
+    if (!o.kids) return salahPecah(q);
+    S.exp[p] = true;
+    S.pilih = null;
+    bunyi.tap();
+    if (!pohonSelesai(q.r, '')) return;
+    S.att++;
+    S.combo++;
+    if (S.combo >= 2) S.bonus += S.combo - 1;
+    tutup(q, true);
 }
 function lanjut() {
     const st = STAGES[S.s];
@@ -431,12 +493,16 @@ function vPlay() {
             (S.seq.length && !S.lock
                 ? `<button class="${K.btn}" data-a="undo">Ulangi urutan</button>`
                 : '');
+    if (q.t === 'split')
+        h += `<p class="${K.mut}">Ketuk <b>＋ Pecah</b> pada bagian yang masih terlalu besar. Soal selesai kalau semua bagian sudah bisa langsung dikerjakan.</p><div class="my-2">${cabang(q.r, '')}</div>`;
     h += `</div>`;
     if (S.fb)
         h += `<div class="${S.ok ? K.ok : K.no}" role="status">${esc(S.fb)}</div>`;
     h += S.lock
         ? `<button class="${K.pr}" data-a="next">Lanjut</button>`
-        : `<button class="${K.pr}" data-a="cek" ${siap(q) ? '' : 'disabled'}>Periksa</button>`;
+        : q.t === 'split'
+          ? ''
+          : `<button class="${K.pr}" data-a="cek" ${siap(q) ? '' : 'disabled'}>Periksa</button>`;
     return (
         h + ` <button class="${K.btn}" data-a="map">Kembali ke peta</button>`
     );
@@ -520,6 +586,8 @@ $.addEventListener('click', (ev) => {
         } else if (a === 'un') delete S.m[i];
         else if (a === 'ord') S.seq.push(i);
         else if (a === 'undo') S.seq = [];
+        else if (a === 'sp') S.pilih = el.dataset.p;
+        else if (a === 'op') pecah(q, el.dataset.p, i);
     }
     draw();
     if (['go', 'next', 'map', 'start'].includes(a)) window.scrollTo(0, 0);
