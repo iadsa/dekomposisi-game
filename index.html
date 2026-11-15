@@ -6,16 +6,26 @@
             name="viewport"
             content="width=device-width,initial-scale=1,viewport-fit=cover"
         />
-        <title>Dekomposisi Game</title>
-        <!-- Tailwind Play CDN: cocok untuk prototipe dan uji coba. Untuk rilis akhir, kompilasi CSS agar lebih ringan. -->
-        <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+        <meta name="theme-color" content="#FFFFFF" />
+        <title>Pecah Masalah · Dekomposisi Kelas 7</title>
+        <link
+            rel="icon"
+            href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg stroke='%230B1F4B' stroke-width='1.6'%3E%3Crect x='2' y='2' width='16' height='16' rx='2.5' fill='%231F4FD8'/%3E%3Crect x='21' y='2' width='9' height='9' rx='2.5' fill='%238FB0F5'/%3E%3Crect x='21' y='14' width='9' height='16' rx='2.5' fill='%23F5B72B'/%3E%3Crect x='2' y='21' width='16' height='9' rx='2.5' fill='%23DCE8FF'/%3E%3C/g%3E%3C/svg%3E"
+        />
+        <!-- Huruf: bila tidak ada internet, otomatis memakai huruf bawaan perangkat. -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap"
+        />
         <link rel="stylesheet" href="css/style.css" />
     </head>
-    <body
-        class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 leading-relaxed"
-    >
-        <main id="app" class="mx-auto max-w-xl"></main>
+    <body>
+        <div id="app"></div>
+        <div id="sr" class="sr" aria-live="polite"></div>
         <script src="js/soal.js"></script>
+        <script src="js/tokoh.js"></script>
         <script src="js/app.js"></script>
     </body>
 </html>
