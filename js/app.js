@@ -201,7 +201,6 @@ window.addEventListener('pointercancel', () => {
 });
 
 /* ===== LOGIKA GAME ===== */
-const IK = ['🔍', '🗂️', '🔢', '🛠️', '🌳'];
 const PEMBUKA = [
     'Ayo pecahkan masalahnya!',
     'Robi siap membantu. Pikirkan baik-baik ya!',
@@ -254,8 +253,12 @@ const benar = (q) =>
             ? q.c.every((c, i) => S.m[i] === c[1])
             : q.r.every(([a, b]) => S.seq.indexOf(a) < S.seq.indexOf(b));
 const xp = () => Object.values(P.h).reduce((a, h) => a + h.xp, 0);
-const bintang = (n) => '★'.repeat(n) + '☆'.repeat(3 - n);
 const buka = (i) => i === 0 || (P.h[i - 1] && P.h[i - 1].b >= 1);
+// Satu warna per tahap (lihat .stitch/DESIGN.md). Dipakai lewat arbitrary value Tailwind.
+const TAHAP = ['#2563EB', '#7C3AED', '#0D9488', '#D97706', '#16A34A'];
+const selesai = (i) => !!(P.h[i] && P.h[i].b >= 1);
+const totalBintang = () => Object.values(P.h).reduce((a, h) => a + h.b, 0);
+const tahapAktif = () => STAGES.findIndex((_, i) => buka(i) && !selesai(i)); // -1 bila semua selesai
 
 // Satu soal selesai: kunci skor, umpan balik, dan kirim log. Dipakai semua tipe soal.
 function tutup(q, b) {
@@ -410,30 +413,88 @@ function vLogin() {
     return `<div class="${K.card}"><h1 class="text-2xl font-semibold mb-2">Pecah Masalah</h1>${mascot('🤖', 'Halo! Aku Robi. Yuk jadi Pemecah Masalah!')}<p class="mb-3">Latihan memecah masalah besar menjadi langkah-langkah kecil. Ada ${STAGES.length} tahap.</p><label for="kode" class="${K.mut}">Nama panggilan</label><input id="kode" maxlength="20" autocomplete="off" autocapitalize="words" class="w-full my-2 p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">${S.err ? '<p class="text-red-600 dark:text-red-400 mb-2">Nama belum sesuai. Gunakan 3–20 huruf.</p>' : ''}<button class="${K.pr}" data-a="start">Mulai</button></div>`;
 }
 
-function vMap() {
-    const lencana = BADGES.filter((_, i) => P.h[i] && P.h[i].b >= 1);
-    return (
-        `<div class="${K.card}"><div class="flex justify-between items-center"><span><b>👤 ${esc(P.kode)}</b> · ⭐ XP: ${xp()}</span>${sndBtn()}</div>${mascot('🤖', xp() ? 'Lanjutkan petualanganmu!' : 'Pilih Tahap 1 untuk mulai.')}<div class="mt-2 flex flex-wrap gap-1.5">${lencana.length ? lencana.map((b) => `<span class="px-2.5 py-0.5 rounded-full text-sm bg-amber-100 text-amber-900 dark:bg-amber-900 dark:text-amber-100">${esc(b)}</span>`).join('') : `<span class="${K.mut}">Lencana akan muncul di sini.</span>`}</div></div>` +
-        STAGES.map((s, i) => {
-            const h = P.h[i],
-                b = buka(i);
-            return `<button class="${K.chip}" data-a="go" data-i="${i}" ${b ? '' : 'disabled'}><b>${b ? IK[i] || '🎯' : '🔒'} ${i + 1}. ${esc(s.n)}</b><span class="float-right text-amber-500 tracking-widest">${bintang(h ? h.b : 0)}</span><br><span class="${K.mut}">${b ? esc(s.info) : 'Terkunci: raih minimal 1 bintang di tahap sebelumnya.'}</span></button>`;
-        }).join('') +
-        `<div class="mt-3 flex gap-2">${online() ? `<button class="${K.btn}" data-a="rank">Peringkat</button>` : ''}<button class="${K.btn}" data-a="keluar">Ganti nama</button></div>`
+function navBawah(aktif) {
+    const item = (tujuan, ikon, label) =>
+        `<button class="flex flex-col items-center justify-center gap-1 min-w-[64px] min-h-[44px] transition-colors ${aktif === tujuan ? 'text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400'}" data-a="${tujuan}"><span aria-hidden="true" class="text-[22px] select-none">${ikon}</span><span class="text-xs">${label}</span></button>`;
+    return `<nav class="fixed bottom-0 left-0 right-0 z-50 mx-auto w-full max-w-xl bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 pb-safe"><div class="flex justify-around items-center h-16 px-3">${item('map', '🗺️', 'Petualangan')}${online() ? item('rank', '🏆', 'Peringkat') : ''}${item('keluar', '👤', 'Ganti nama')}</div></nav>`;
+}
+
+function headerAtas() {
+    return `<header class="fixed top-0 left-0 right-0 z-50 mx-auto w-full max-w-xl bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 pt-safe"><div class="h-16 px-4 flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><div class="w-9 h-9 shrink-0 rounded-xl bg-blue-50 dark:bg-slate-700 flex items-center justify-center"><span aria-hidden="true" class="text-lg select-none">🤖</span></div><div class="flex flex-col min-w-0"><span class="font-display text-[17px] leading-none tracking-tight font-bold text-blue-600 dark:text-blue-400 truncate">Pecah Masalah</span><span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">Dekomposisi Kelas 7</span></div></div><div class="flex items-center gap-1.5 shrink-0"><div class="flex items-center gap-1 bg-slate-50 dark:bg-slate-700 px-2 py-1 rounded-full border border-slate-200 dark:border-slate-600"><span aria-hidden="true" class="text-[13px] select-none">⭐</span><span class="text-[11px] font-bold">${xp()} XP</span></div><div class="flex items-center gap-1 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-full border border-slate-200 dark:border-slate-600"><span aria-hidden="true" class="text-[13px] select-none">🏅</span><span class="text-[11px] font-bold text-green-700 dark:text-green-400">${totalBintang()}/${STAGES.length * 3}</span></div><button class="w-8 h-8 shrink-0 rounded-full bg-blue-600 text-white flex items-center justify-center font-display text-sm font-bold" data-a="keluar" aria-label="Ganti nama">${esc((P.kode || '?').charAt(0).toUpperCase())}</button></div></div></header>`;
+}
+
+// Header + isi + nav bawah, dipakai layar peta dan peringkat saja.
+const kerangka = (isi, aktif) =>
+    `${headerAtas()}<main class="layar px-4 w-full">${isi}</main>${navBawah(aktif)}`;
+
+const bintangKecil = (n) =>
+    [0, 1, 2]
+        .map(
+            (k) =>
+                `<span class="${k < n ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600'}">★</span>`,
+        )
+        .join('');
+
+// Kartu tahap yang sedang dikerjakan: aksi utama di zona jempol.
+function kartuAktif(i) {
+    const s = STAGES[i],
+        h = P.h[i],
+        w = TAHAP[i % TAHAP.length],
+        sudah = selesai(i);
+    return `<div class="mt-6 bg-white dark:bg-slate-800 rounded-xl p-4 shadow-md border border-slate-200 dark:border-slate-700 flex flex-col gap-3"><div class="flex items-start justify-between gap-2"><div class="min-w-0"><span class="inline-block px-2 py-0.5 rounded-full text-xs font-bold text-[${w}] bg-[${w}]/10">Tahap ${i + 1} • ${sudah ? 'Selesai' : 'Sedang Dikerjakan'}</span><h3 class="font-display text-[22px] font-bold leading-tight mt-1">${esc(s.n)}</h3></div>${h ? `<div class="flex items-center gap-1 bg-slate-50 dark:bg-slate-700 px-2 py-1 rounded-lg shrink-0"><span aria-hidden="true" class="text-amber-500">⭐</span><span class="text-xs font-bold">${h.xp} XP</span></div>` : ''}</div><p class="text-sm text-slate-500 dark:text-slate-400">${esc(s.info)}</p><div class="grid grid-cols-2 gap-1"><div class="flex items-center gap-1.5 p-2 rounded-lg bg-slate-50 dark:bg-slate-700/50 min-w-0"><span aria-hidden="true" class="text-sm">🛠️</span><span class="text-xs truncate">${esc(s.alat)}</span></div><div class="flex items-center gap-1.5 p-2 rounded-lg bg-slate-50 dark:bg-slate-700/50 min-w-0"><span aria-hidden="true" class="text-sm">🎯</span><span class="text-xs truncate">${s.qs.length} soal</span></div></div><button class="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white font-display text-[16px] font-bold flex items-center justify-center gap-2 shadow-md transition-all" data-a="go" data-i="${i}"><span>${sudah ? 'Main Lagi' : 'Mulai Tahap'} ${i + 1}</span><span aria-hidden="true" class="text-lg">🚀</span></button></div>`;
+}
+
+// Satu node peta. Tahap terkunci tidak bisa diketuk, jadi bukan tombol.
+function kartuTahap(i, aktif) {
+    const s = STAGES[i],
+        h = P.h[i],
+        w = TAHAP[i % TAHAP.length],
+        final = i === STAGES.length - 1,
+        sudah = selesai(i),
+        ukuran = final ? 'w-20 h-20' : 'w-16 h-16',
+        jarak = aktif ? 'mt-3' : 'mt-2',
+        // Garis SVG memakai titik 30% / 70% / 50% lebar peta; blok node diletakkan
+        // di kolom selebar 60% supaya titik tengahnya jatuh di angka yang sama.
+        kolom = `<div class="flex ${final ? 'justify-center' : i % 2 ? 'justify-end' : 'justify-start'}"><div class="${final ? 'w-full' : 'w-[60%]'} flex justify-center">NODE</div></div>`;
+    const bungkus = (isi) => kolom.replace('NODE', isi);
+    if (!buka(i))
+        return bungkus(
+            `<div class="flex flex-col items-center opacity-70"><div class="relative ${ukuran} rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex flex-col items-center justify-center shadow-sm">${final ? `<span aria-hidden="true" class="text-2xl select-none">👑</span><span class="text-xs font-bold mt-0.5">FINAL</span><div class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-600 flex items-center justify-center"><span class="text-xs">🔒</span></div>` : `<span aria-hidden="true" class="text-xl select-none">🔒</span>`}</div><div class="mt-2 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded-lg text-center max-w-[160px]"><span class="block text-xs font-bold text-slate-500 dark:text-slate-400 line-clamp-1">${esc(s.n)}</span><span class="block text-[10px] font-medium text-slate-400 dark:text-slate-500">Buka di Tahap ${i}</span></div></div>`,
+        );
+    return bungkus(
+        `<button class="group flex flex-col items-center relative" data-a="go" data-i="${i}">${aktif ? `<div class="absolute -inset-2 rounded-full bg-[${w}]/30 animate-ping pointer-events-none aura"></div>` : ''}<div class="relative ${ukuran} rounded-full bg-[${w}] text-white flex flex-col items-center justify-center shadow-md active:scale-95 transition-transform">${final ? `<span aria-hidden="true" class="text-2xl select-none">👑</span><span class="text-xs font-bold mt-0.5">FINAL</span>` : `<span class="font-display text-[22px] font-bold leading-none">${i + 1}</span>`}${sudah ? `<div class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-green-50 flex items-center justify-center shadow-sm"><span class="text-xs">✅</span></div>` : ''}${aktif ? `<div class="absolute -bottom-2 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-full shadow-sm text-[10px] font-bold tracking-wider uppercase text-[${w}]">Main</div>` : ''}</div><div class="${jarak} bg-white dark:bg-slate-800 px-2 py-1 rounded-lg shadow-sm text-center max-w-[160px]"><span class="block text-xs font-bold ${aktif ? `text-[${w}]` : 'text-slate-900 dark:text-slate-100'} line-clamp-1">${esc(s.n)}</span><div class="flex justify-center items-center gap-0.5 mt-0.5 text-xs">${bintangKecil(h ? h.b : 0)}</div></div></button>`,
     );
+}
+
+function vMap() {
+    const lencana = BADGES.filter((_, i) => selesai(i)),
+        aktif = tahapAktif(),
+        sudah = STAGES.filter((_, i) => selesai(i)).length,
+        jalur = [
+            'M 96 68 C 96 110, 224 120, 224 172',
+            'M 224 172 C 224 220, 96 230, 96 288',
+            'M 96 288 C 96 340, 224 350, 224 416',
+            'M 224 416 C 224 480, 160 490, 160 550',
+        ]
+            .map(
+                (d, i) =>
+                    `<path d="${d}" stroke="${selesai(i) ? TAHAP[i] : '#c3c6d7'}" stroke-dasharray="6 6" stroke-linecap="round" stroke-width="4"></path>`,
+            )
+            .join('');
+    return `<div class="flex flex-col w-full pb-6"><div class="flex items-start gap-2 bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"><div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-slate-700 flex items-center justify-center shrink-0"><span aria-hidden="true" class="text-xl select-none">🤖</span></div><div class="flex-1 bg-slate-50 dark:bg-slate-700/50 p-2 rounded-xl"><p class="text-sm font-medium leading-snug">${Object.keys(P.h).length ? 'Lanjutkan petualanganmu! Pilih misi untuk memecah masalah besar jadi langkah kecil yang mudah.' : 'Hai! Pilih misi untuk mulai memecah masalah besar jadi langkah kecil yang mudah!'}</p></div></div><div class="flex items-center justify-between gap-2 bg-white dark:bg-slate-800 px-3 py-2 rounded-xl mt-3 shadow-sm border border-slate-200 dark:border-slate-700"><div class="flex items-center gap-2 min-w-0"><span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Perjalananmu</span><span class="font-display text-[17px] font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">${sudah}/${STAGES.length} Selesai</span></div><span class="font-display text-[17px] font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap" aria-label="Total bintang ${totalBintang()}">${totalBintang()} ⭐</span></div>${lencana.length ? `<div class="flex flex-wrap gap-1.5 mt-2">${lencana.map((b) => `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-900 dark:bg-amber-900 dark:text-amber-100">${esc(b)}</span>`).join('')}</div>` : ''}<div class="relative w-full px-2 py-8"><svg class="absolute inset-0 w-full h-full pointer-events-none z-0" fill="none" preserveAspectRatio="none" viewBox="0 0 320 620" aria-hidden="true">${jalur}</svg><div class="flex flex-col gap-8 relative z-10">${STAGES.map((_, i) => kartuTahap(i, i === aktif)).join('')}</div></div>${kartuAktif(aktif < 0 ? STAGES.length - 1 : aktif)}</div>`;
 }
 
 function vRank() {
     const r = S.rank;
     const isi =
         r === null
-            ? '<p>Memuat…</p>'
+            ? '<p class="text-slate-500 dark:text-slate-400">Memuat…</p>'
             : S.rankErr
-              ? `<p class="${K.mut}">Gagal memuat peringkat. Periksa koneksi lalu coba lagi.</p><button class="${K.btn}" data-a="rank">Coba lagi</button>`
+              ? `<p class="text-sm text-slate-500 dark:text-slate-400">Gagal memuat peringkat. Periksa koneksi lalu coba lagi.</p><button class="min-h-[44px] px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 mt-2" data-a="rank">Coba lagi</button>`
               : r.length
-                ? `<ol class="pl-5 list-decimal">${r.map((x) => `<li class="${x.kode === P.kode ? 'font-semibold' : ''}">${esc(x.kode)}: ${x.xp} XP</li>`).join('')}</ol>`
-                : `<p class="${K.mut}">Belum ada data. Selesaikan satu tahap untuk masuk peringkat.</p>`;
-    return `<div class="${K.card}"><h2 class="text-xl font-semibold mb-2">Peringkat XP</h2>${isi}</div><button class="${K.pr}" data-a="map">Kembali ke peta</button>`;
+                ? `<ol class="space-y-2">${r.map((x, n) => `<li class="flex items-center gap-3 min-h-[44px] px-3 rounded-xl ${x.kode === P.kode ? 'ring-2 ring-blue-600' : 'bg-slate-50 dark:bg-slate-700/50'}"><span class="font-display w-6 text-slate-400 dark:text-slate-500">${n + 1}</span><span class="flex-1 truncate">${esc(x.kode)}</span>${x.kode === P.kode ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wider">Kamu</span>' : ''}<span class="font-display font-bold text-amber-600 dark:text-amber-400">${x.xp} XP</span></li>`).join('')}</ol>`
+                : `<div class="flex items-center gap-2"><span aria-hidden="true" class="text-2xl">🤖</span><p class="text-sm text-slate-500 dark:text-slate-400">Belum ada data. Selesaikan satu tahap untuk masuk peringkat.</p></div>`;
+    return `<h2 class="font-display text-[28px] font-bold mb-3">Peringkat XP</h2><div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4">${isi}</div>`;
 }
 
 function vPlay() {
@@ -517,8 +578,9 @@ function vHabis() {
     return `<div class="${K.card} text-center"><div class="text-6xl mascot" aria-hidden="true">🥹</div><h2 class="text-xl font-semibold my-2">Energi habis!</h2><p class="mb-3">Tidak apa-apa. Salah itu bagian dari belajar. Robi yakin kamu bisa di percobaan berikutnya.</p><button class="${K.pr}" data-a="go" data-i="${S.s}">Coba lagi</button> <button class="${K.btn}" data-a="map">Ke peta</button></div>`;
 }
 
+const BERKERANGKA = ['map', 'rank'];
 function draw() {
-    $.innerHTML = {
+    const isi = {
         login: vLogin,
         map: vMap,
         play: vPlay,
@@ -526,6 +588,9 @@ function draw() {
         rank: vRank,
         habis: vHabis,
     }[S.v]();
+    $.innerHTML = BERKERANGKA.includes(S.v)
+        ? kerangka(isi, S.v)
+        : `<main class="pad-s">${isi}</main>`;
 }
 
 $.addEventListener('click', (ev) => {
@@ -556,6 +621,7 @@ $.addEventListener('click', (ev) => {
         store('pm_p', P);
         S = { v: 'map' };
     } else if (a === 'keluar') {
+        if (!window.confirm('Ganti nama? Progres di HP ini akan hilang.')) return;
         P.kode = '';
         P.h = {};
         store('pm_p', P);
