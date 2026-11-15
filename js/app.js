@@ -34,8 +34,9 @@ const store = (k, v) => {
         return null;
     }
 };
+const NAMA = /^[A-Za-z][A-Za-z .'-]{2,19}$/; // nama panggilan, 3-20 karakter
 const P = store('pm_p') || { kode: '', h: {} };
-let S = { v: P.kode ? 'map' : 'login' },
+let S = { v: NAMA.test(P.kode || '') ? 'map' : 'login' },
     kirimBerjalan = false;
 const online = () => API_URL.startsWith('http');
 function kirim(d) {
@@ -344,19 +345,19 @@ const mascot = (e, t) =>
 const sndBtn = () =>
     `<button class="${K.btn} !min-h-[36px] !px-3" data-a="snd" aria-label="${mute ? 'Nyalakan suara' : 'Matikan suara'}">${mute ? '🔇' : '🔊'}</button>`;
 function vLogin() {
-    return `<div class="${K.card}"><h1 class="text-2xl font-semibold mb-2">Pecah Masalah</h1>${mascot('🤖', 'Halo! Aku Robi. Yuk jadi Pemecah Masalah!')}<p class="mb-3">Latihan memecah masalah besar menjadi langkah-langkah kecil. Ada ${STAGES.length} tahap.</p><label for="kode" class="${K.mut}">Masukkan nama lengkap)</label><input id="kode" maxlength="10" autocomplete="off" class="w-full my-2 p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">${S.err ? '<p class="text-red-600 dark:text-red-400 mb-2">Kode belum sesuai. Gunakan 2–10 huruf atau angka.</p>' : ''}<button class="${K.pr}" data-a="start">Mulai</button></div>`;
+    return `<div class="${K.card}"><h1 class="text-2xl font-semibold mb-2">Pecah Masalah</h1>${mascot('🤖', 'Halo! Aku Robi. Yuk jadi Pemecah Masalah!')}<p class="mb-3">Latihan memecah masalah besar menjadi langkah-langkah kecil. Ada ${STAGES.length} tahap.</p><label for="kode" class="${K.mut}">Nama panggilan</label><input id="kode" maxlength="20" autocomplete="off" autocapitalize="words" class="w-full my-2 p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">${S.err ? '<p class="text-red-600 dark:text-red-400 mb-2">Nama belum sesuai. Gunakan 3–20 huruf.</p>' : ''}<button class="${K.pr}" data-a="start">Mulai</button></div>`;
 }
 
 function vMap() {
     const lencana = BADGES.filter((_, i) => P.h[i] && P.h[i].b >= 1);
     return (
-        `<div class="${K.card}"><div class="flex justify-between items-center"><span><b>Kode: ${esc(P.kode)}</b> · ⭐ XP: ${xp()}</span>${sndBtn()}</div>${mascot('🤖', xp() ? 'Lanjutkan petualanganmu!' : 'Pilih Tahap 1 untuk mulai.')}<div class="mt-2 flex flex-wrap gap-1.5">${lencana.length ? lencana.map((b) => `<span class="px-2.5 py-0.5 rounded-full text-sm bg-amber-100 text-amber-900 dark:bg-amber-900 dark:text-amber-100">${esc(b)}</span>`).join('') : `<span class="${K.mut}">Lencana akan muncul di sini.</span>`}</div></div>` +
+        `<div class="${K.card}"><div class="flex justify-between items-center"><span><b>👤 ${esc(P.kode)}</b> · ⭐ XP: ${xp()}</span>${sndBtn()}</div>${mascot('🤖', xp() ? 'Lanjutkan petualanganmu!' : 'Pilih Tahap 1 untuk mulai.')}<div class="mt-2 flex flex-wrap gap-1.5">${lencana.length ? lencana.map((b) => `<span class="px-2.5 py-0.5 rounded-full text-sm bg-amber-100 text-amber-900 dark:bg-amber-900 dark:text-amber-100">${esc(b)}</span>`).join('') : `<span class="${K.mut}">Lencana akan muncul di sini.</span>`}</div></div>` +
         STAGES.map((s, i) => {
             const h = P.h[i],
                 b = buka(i);
             return `<button class="${K.chip}" data-a="go" data-i="${i}" ${b ? '' : 'disabled'}><b>${b ? IK[i] || '🎯' : '🔒'} ${i + 1}. ${esc(s.n)}</b><span class="float-right text-amber-500 tracking-widest">${bintang(h ? h.b : 0)}</span><br><span class="${K.mut}">${b ? esc(s.info) : 'Terkunci: raih minimal 1 bintang di tahap sebelumnya.'}</span></button>`;
         }).join('') +
-        `<div class="mt-3 flex gap-2">${online() ? `<button class="${K.btn}" data-a="rank">Peringkat</button>` : ''}<button class="${K.btn}" data-a="keluar">Ganti kode</button></div>`
+        `<div class="mt-3 flex gap-2">${online() ? `<button class="${K.btn}" data-a="rank">Peringkat</button>` : ''}<button class="${K.btn}" data-a="keluar">Ganti nama</button></div>`
     );
 }
 
@@ -477,8 +478,11 @@ $.addEventListener('click', (ev) => {
         mute = !mute;
         store('pm_snd', mute ? 'off' : 'on');
     } else if (a === 'start') {
-        const k = document.getElementById('kode').value.trim();
-        if (!/^[A-Za-z0-9-]{2,10}$/.test(k)) {
+        const k = document
+            .getElementById('kode')
+            .value.trim()
+            .replace(/\s+/g, ' ');
+        if (!NAMA.test(k)) {
             S.err = 1;
             return draw();
         }
