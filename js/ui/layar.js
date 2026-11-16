@@ -9,7 +9,7 @@ function vLogin() {
         `<button type="button" class="tokoh-pilih" data-a="av" data-w="${w}" aria-pressed="${(S.av || AV()) === w}">${tokoh(w, { bust: true, ex: 'senang', alt: '' })}<span>${TOKOH[w].nama}<small>${cat}</small></span></button>`;
     const av = S.av || AV(),
         tem = TOKOH[av] ? av : AV();
-    return `<div class="masuk"><div class="intro"><div class="merek">${logo(30)}<span>Dekomposisi · Kelas 7</span></div><h1 style="margin-top:18px">Pecah<em>Masalah</em></h1><p class="lead">Latihan memecah masalah besar menjadi langkah-langkah kecil. Ada ${STAGES.length} tahap.</p><form class="isi" data-form="mulai" novalidate><div class="fld"><label for="kode">Nama panggilan</label><input id="kode" maxlength="20" autocomplete="off" autocapitalize="words" value="${esc(S.nama || '')}" ${S.err ? 'aria-invalid="true" aria-describedby="e-kode"' : 'aria-describedby="b-kode"'}>${S.err ? '<p class="salah" id="e-kode">Nama belum sesuai. Gunakan 3–20 huruf.</p>' : '<p class="bantu" id="b-kode">3–20 huruf. Dipakai di papan peringkat.</p>'}</div><fieldset class="fld"><legend>Pilih tokohmu</legend><div class="pilih">${pil('arlin', 'Kepang kuning')}${pil('yogi', 'Kacamata bulat')}${pil('adsa', 'Dasi biru')}</div><p class="bantu">${TOKOH[tem].nama} akan menemanimu dan memberi petunjuk.</p></fieldset><button class="btn pr" type="submit" data-a="start">Mulai</button></form></div><div class="hero">${adegan(!lebar())}</div></div>`;
+    return `<div class="masuk"><div class="intro"><div class="merek">${logo(30)}<span>Dekomposisi · Kelas 7</span></div><h1 style="margin-top:18px">Pecah<em>Masalah</em></h1><p class="lead">Latihan memecah masalah besar menjadi langkah-langkah kecil. Ada ${STAGES.length} tahap.</p><form class="isi" data-form="mulai" novalidate><div class="fld"><label for="kode">Nama panggilan</label><input id="kode" maxlength="20" autocomplete="off" autocapitalize="words" value="${esc(S.nama || '')}" ${S.err ? 'aria-invalid="true" aria-describedby="e-kode"' : 'aria-describedby="b-kode"'}>${S.err ? '<p class="salah" id="e-kode">Nama belum sesuai. Gunakan 3–20 huruf.</p>' : '<p class="bantu" id="b-kode">3–20 huruf. Dipakai di papan peringkat.</p>'}</div><fieldset class="fld"><legend>Pilih tokohmu</legend><div class="pilih">${pil('arlin', 'Kepang kuning')}${pil('yogi', 'Kacamata bulat')}${pil('adsa', 'Dasi biru')}</div><p class="bantu">${TOKOH[tem].nama} jadi avatarmu. ${TOKOH[GD(tem)].nama} menemanimu dan memberi petunjuk.</p></fieldset><button class="btn pr" type="submit" data-a="start">Mulai</button></form></div><div class="hero">${adegan(!lebar())}</div></div>`;
 }
 
 const tombolTema = () =>
@@ -112,7 +112,7 @@ function dock(q) {
     const teks = S.fb
         ? `<b>${esc(S.fbh)}</b><span>${esc(S.fb)}</span>`
         : esc(S.mas.t);
-    return `<div class="dock ${S.fs}"><div class="dock-in"><div class="pemandu">${tokoh(GD(), { bust: true, ex: S.mas.ex, alt: TOKOH[GD()].nama })}</div><p class="ucap"><span>${teks}</span></p>${tombol}</div></div>`;
+    return `<div class="dock ${S.fs}"><div class="dock-in"><div class="pemandu">${tokoh(AV(), { bust: true, ex: 'netral', alt: TOKOH[AV()].nama + ' (kamu)' })}${tokoh(GD(), { bust: true, ex: S.mas.ex, alt: TOKOH[GD()].nama })}</div><p class="ucap"><span>${teks}</span></p>${tombol}</div></div>`;
 }
 
 function vPlay() {

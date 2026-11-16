@@ -165,6 +165,14 @@ cek("AV simpanan lama 'bayu'", api.AV(), 'arlin');
 api.P.av = 'adsa';
 cek('AV simpanan baru', api.AV(), 'adsa');
 cek('GD selalu tokoh lain', ['arlin', 'yogi', 'adsa'].map((k) => ((api.P.av = k), api.GD() !== k)), [true, true, true]);
+api.P.av = 'adsa';
+api.atur({ v: 'login', av: 'adsa' });
+pasti('layar masuk: teks peran avatar & pendamping', api.layar.login().includes('Adsa jadi avatarmu. Arlin menemanimu dan memberi petunjuk.'));
+api.mulai(0, 0);
+pasti(
+    'dock: avatar pemain & pendamping',
+    ['aria-label="Adsa (kamu)"', 'aria-label="Arlin"'].every((s) => api.layar.play().includes(s)),
+);
 api.P.av = 'arlin';
 
 const EX = ['senang', 'semangat', 'sedih', 'mikir', 'netral'];

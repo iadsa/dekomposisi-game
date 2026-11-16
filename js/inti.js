@@ -88,7 +88,7 @@ async function muatPeringkat() {
 /* ===== TOKOH: pemain memilih satu, temannya menjadi pemandu ===== */
 // Simpanan lama bisa berisi 'rani'/'bayu'; nama yang tidak dikenal kembali ke Arlin.
 const AV = () => (TOKOH[P.av] ? P.av : 'arlin');
-const GD = () => Object.keys(TOKOH).find((k) => k !== AV());
+const GD = (av) => Object.keys(TOKOH).find((k) => k !== (av || AV()));
 
 /* ===== TEMA: terang bawaan, gelap hanya bila dipilih ===== */
 let tema = store('pm_tema') === 'gelap' ? 'gelap' : 'terang';

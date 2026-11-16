@@ -472,17 +472,22 @@
     margin: 0 auto;
     padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
     display: grid;
-    grid-template-columns: 60px 1fr;
+    grid-template-columns: 96px 1fr;
     gap: 4px 12px;
     align-items: center;
 }
 .dock .pemandu {
     align-self: end;
     margin-top: -34px;
+    display: flex;
+    align-items: flex-end;
 }
 .dock .pemandu svg {
-    width: 60px;
+    width: 56px;
     display: block;
+}
+.dock .pemandu svg:first-child {
+    width: 40px;
 }
 .dock .ucap {
     font-size: 15px;
@@ -530,7 +535,7 @@
         min-width: 150px;
     }
     .dock-in {
-        grid-template-columns: 60px 1fr auto;
+        grid-template-columns: 96px 1fr auto;
     }
 }
 
