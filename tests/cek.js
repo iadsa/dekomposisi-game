@@ -104,7 +104,7 @@ const api = eval(
   mulai: (s, q) => { S = { v: 'play', s, q, sk: [], hp: 3, combo: 0, bonus: 0 }; rq(); },
   soal: () => Q(), rq, pecah, periksa, pohonSelesai,
   TOKOH, POSE, AV, GD, tokoh, adegan,
-  IMG, ILUS, srcGambar, adeganSoal,
+  IMG, ILUS, srcGambar, adeganSoal, IKON_TAHAP, migrasiProgres,
   tema: () => tema, aturTema, kerangka,
   vol: () => ({ musik: volMusik, efek: volEfek }), aturVolume, musik, efek, bunyi,
   layar: { login: () => vLogin(), map: () => vMap(), play: () => vPlay(), hasil: () => vHasil(), piagam: () => vPiagam(), habis: () => vHabis(), rank: () => vRank(), modal: () => modalSuara() } })`,
@@ -305,6 +305,39 @@ api.periksa(api.soal());
 api.periksa(api.soal());
 api.periksa(api.soal());
 cek('pilihan salah 3 kali -> skor 0', api.lihat().sk, [0]);
+
+/* ===== 5. Urutan tahap baru (Urutkan di akhir) + migrasi progres lama ===== */
+cek('urutan tahap baru', api.STAGES.map((s) => s.n), [
+    'Kenali',
+    'Kelompokkan',
+    'Perbaiki',
+    'Pecah Sendiri',
+    'Urutkan',
+]);
+cek(
+    'jumlah tahap = ikon = lencana',
+    [api.STAGES.length, api.IKON_TAHAP.length, api.BADGES.length],
+    [5, 5, 5],
+);
+
+// Indeks lama: 0 Kenali, 1 Kelompokkan, 2 Urutkan, 3 Perbaiki, 4 Pecah Sendiri.
+const pLama = {
+        kode: 'Arlin',
+        h: {
+            0: { p: 100, b: 3, xp: 10 },
+            1: { p: 90, b: 2, xp: 20 },
+            2: { p: 80, b: 2, xp: 30 },
+            3: { p: 100, b: 3, xp: 40 },
+            4: { p: 70, b: 1, xp: 50 },
+        },
+    },
+    pBaru = api.migrasiProgres(pLama);
+cek('migrasi progres: indeks tahap baru', [0, 1, 2, 3, 4].map((i) => pBaru.h[i].xp), [10, 20, 40, 50, 30]);
+cek(
+    'migrasi progres: sekali saja, tanpa lubang',
+    [api.migrasiProgres(pBaru) === pBaru, pBaru.v, Object.values(pBaru.h).filter((h) => !h).length],
+    [true, 2, 0],
+);
 
 console.log(gagal ? `\n${gagal} pemeriksaan GAGAL` : '\nSemua pemeriksaan lolos');
 process.exit(gagal ? 1 : 0);

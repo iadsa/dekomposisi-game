@@ -31,7 +31,7 @@ const IK = {
     piala: '<path d="M8 3.5h8v4.2a4 4 0 0 1-8 0z"/><path d="M8 4.8H5.4a2.4 2.4 0 0 0 2.6 3.9M16 4.8h2.6a2.4 2.4 0 0 1-2.6 3.9"/><path d="M12 11.7v3.1M9.4 20.5h5.2M10.2 20.5l.5-5.7h2.6l.5 5.7"/>',
 };
 // Ikon alat tiap tahap, urut sesuai STAGES.
-const IKON_TAHAP = ['pecah', 'kelompok', 'urut', 'lup', 'pohon'];
+const IKON_TAHAP = ['pecah', 'kelompok', 'lup', 'pohon', 'urut'];
 
 function ic(nama, ukuran, isi) {
     const u = ukuran || 20;

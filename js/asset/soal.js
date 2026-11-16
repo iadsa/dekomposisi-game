@@ -177,81 +177,6 @@ const STAGES = [
     },
 
     {
-        n: "Urutkan",
-        alat: "Panah urutan",
-        info: "Susun langkah sesuai ketergantungannya. Kadang ada lebih dari satu urutan benar.",
-        qs: [
-            {
-                t: "order",
-                p: "Membuat teh manis. Ketuk langkah sesuai urutan pengerjaan.",
-                c: [
-                    "Merebus air",
-                    "Menuang air ke gelas",
-                    "Memasukkan teh dan gula ke gelas",
-                    "Mengaduk"
-                ],
-                r: [
-                    [0, 1],
-                    [2, 1],
-                    [1, 3]
-                ],
-                k: "Air harus matang sebelum dituang dan diaduk sesudahnya. Teh dan gula boleh dimasukkan lebih dulu atau sambil menunggu air."
-            },
-            {
-                t: "order",
-                p: "Menyiapkan presentasi kelompok. Ketuk langkah sesuai urutan pengerjaan.",
-                c: [
-                    "Menentukan topik",
-                    "Mencari bahan",
-                    "Menyusun slide",
-                    "Menulis naskah",
-                    "Berlatih presentasi"
-                ],
-                r: [
-                    [0, 1],
-                    [1, 2],
-                    [1, 3],
-                    [2, 4],
-                    [3, 4]
-                ],
-                k: "Topik lebih dulu, lalu bahan. Slide dan naskah boleh bergantian, tetapi keduanya selesai sebelum berlatih."
-            },
-            {
-                t: "order",
-                p: "Mencuci dan menjemur pakaian. Ketuk langkah sesuai urutan pengerjaan.",
-                c: [
-                    "Mengumpulkan pakaian kotor",
-                    "Memisahkan pakaian",
-                    "Merendam dengan deterjen",
-                    "Membilas",
-                    "Menyiapkan tempat jemuran",
-                    "Menjemur"
-                ],
-                r: [
-                    [0, 1],
-                    [1, 2],
-                    [2, 3],
-                    [3, 5],
-                    [4, 5]
-                ],
-                k: "Tempat jemuran boleh disiapkan kapan saja, asalkan sebelum menjemur."
-            },
-            {
-                t: "choice",
-                f: 1,
-                p: "Refleksi: mengapa urutan langkah penting?",
-                o: [
-                    "Beberapa langkah bergantung pada hasil langkah sebelumnya",
-                    "Supaya cepat selesai apa pun urutannya",
-                    "Urutan tidak pernah penting"
-                ],
-                a: 0,
-                k: "Langkah yang bergantung pada langkah lain harus menunggu hasilnya."
-            }
-        ]
-    },
-
-    {
         n: "Perbaiki",
         alat: "Kaca pembesar",
         info: "Temukan langkah yang tidak relevan atau yang hilang.",
@@ -370,6 +295,81 @@ const STAGES = [
                 ],
                 a: 0,
                 k: "Pemecahan yang baik lengkap dan setiap bagiannya punya tugas yang jelas."
+            }
+        ]
+    },
+
+    {
+        n: "Urutkan",
+        alat: "Panah urutan",
+        info: "Susun langkah sesuai ketergantungannya. Kadang ada lebih dari satu urutan benar.",
+        qs: [
+            {
+                t: "order",
+                p: "Membuat teh manis. Ketuk langkah sesuai urutan pengerjaan.",
+                c: [
+                    "Merebus air",
+                    "Menuang air ke gelas",
+                    "Memasukkan teh dan gula ke gelas",
+                    "Mengaduk"
+                ],
+                r: [
+                    [0, 1],
+                    [2, 1],
+                    [1, 3]
+                ],
+                k: "Air harus matang sebelum dituang dan diaduk sesudahnya. Teh dan gula boleh dimasukkan lebih dulu atau sambil menunggu air."
+            },
+            {
+                t: "order",
+                p: "Menyiapkan presentasi kelompok. Ketuk langkah sesuai urutan pengerjaan.",
+                c: [
+                    "Menentukan topik",
+                    "Mencari bahan",
+                    "Menyusun slide",
+                    "Menulis naskah",
+                    "Berlatih presentasi"
+                ],
+                r: [
+                    [0, 1],
+                    [1, 2],
+                    [1, 3],
+                    [2, 4],
+                    [3, 4]
+                ],
+                k: "Topik lebih dulu, lalu bahan. Slide dan naskah boleh bergantian, tetapi keduanya selesai sebelum berlatih."
+            },
+            {
+                t: "order",
+                p: "Mencuci dan menjemur pakaian. Ketuk langkah sesuai urutan pengerjaan.",
+                c: [
+                    "Mengumpulkan pakaian kotor",
+                    "Memisahkan pakaian",
+                    "Merendam dengan deterjen",
+                    "Membilas",
+                    "Menyiapkan tempat jemuran",
+                    "Menjemur"
+                ],
+                r: [
+                    [0, 1],
+                    [1, 2],
+                    [2, 3],
+                    [3, 5],
+                    [4, 5]
+                ],
+                k: "Tempat jemuran boleh disiapkan kapan saja, asalkan sebelum menjemur."
+            },
+            {
+                t: "choice",
+                f: 1,
+                p: "Refleksi: mengapa urutan langkah penting?",
+                o: [
+                    "Beberapa langkah bergantung pada hasil langkah sebelumnya",
+                    "Supaya cepat selesai apa pun urutannya",
+                    "Urutan tidak pernah penting"
+                ],
+                a: 0,
+                k: "Langkah yang bergantung pada langkah lain harus menunggu hasilnya."
             }
         ]
     }

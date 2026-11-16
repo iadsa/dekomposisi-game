@@ -3,7 +3,7 @@
 /* ===== PENGATURAN ===== */
 const API_URL =
     'https://script.google.com/macros/s/AKfycbzCP7tNhmnBoAXQC-BADuiKhUabSxHpDpxHvsAgoKSpD7CIb3yXUWkt1fo8ET30KiUc/exec'; // URL Web App dari Apps Script
-const BADGES = ['Pemecah', 'Pengelompok', 'Penyusun', 'Pemeriksa', 'Perancang'];
+const BADGES = ['Pemecah', 'Pengelompok', 'Pemeriksa', 'Perancang', 'Penyusun'];
 
 /* ===== PENYIMPANAN & PENGIRIMAN ===== */
 const $ = document.getElementById('app');
@@ -21,7 +21,28 @@ const store = (k, v) => {
     }
 };
 const NAMA = /^[A-Za-z][A-Za-z .'-]{2,19}$/; // nama panggilan, 3-20 karakter
-const P = store('pm_p') || { kode: '', h: {} };
+
+// Progres lama menyimpan hasil per indeks tahap versi lama (Urutkan di posisi 3).
+// Peta indeks lama -> baru, sekali saja, ditandai P.v = 2.
+function migrasiProgres(p) {
+    if (p.v >= 2) return p;
+    const lama = p.h || {},
+        h = {};
+    [
+        [0, 0],
+        [1, 1],
+        [2, 3],
+        [3, 4],
+        [4, 2],
+    ].forEach(([baru, asal]) => {
+        if (lama[asal]) h[baru] = lama[asal];
+    });
+    p.h = h;
+    p.v = 2;
+    store('pm_p', p);
+    return p;
+}
+const P = migrasiProgres(store('pm_p') || { kode: '', h: {}, v: 2 });
 let S = { v: NAMA.test(P.kode || '') ? 'map' : 'login' },
     kirimBerjalan = false;
 const online = () => API_URL.startsWith('http');

@@ -29,35 +29,8 @@ const ILUS = {
     '2.1': { zona: ['t2-q1-persiapan', 't2-q1-pelaksanaan', 't2-q1-beres'] },
     '2.2': { zona: ['t2-q2-sebelum', 't2-q2-saat', 't2-q2-setelah'] },
     '2.3': { zona: ['t2-q3-sebelum', 't2-q3-selama', 't2-q3-setelah'] },
+    // Tahap 3: Perbaiki (berkas t4-*).
     '3.1': {
-        scene: ['t3-q1-teh', 'Segelas teh manis panas di atas meja'],
-        ikon: {
-            'Merebus air': 't3-q1-rebus',
-            'Menuang air ke gelas': 't3-q1-tuang',
-            'Memasukkan teh dan gula ke gelas': 't3-q1-tehgula',
-            Mengaduk: 't3-q1-aduk',
-        },
-    },
-    '3.2': {
-        ikon: {
-            'Menentukan topik': 't3-q2-topik',
-            'Mencari bahan': 't3-q2-bahan',
-            'Menyusun slide': 't3-q2-slide',
-            'Menulis naskah': 't3-q2-naskah',
-            'Berlatih presentasi': 't3-q2-latihan',
-        },
-    },
-    '3.3': {
-        ikon: {
-            'Mengumpulkan pakaian kotor': 't3-q3-kumpul',
-            'Memisahkan pakaian': 't3-q3-pisah',
-            'Merendam dengan deterjen': 't3-q3-rendam',
-            Membilas: 't3-q3-bilas',
-            'Menyiapkan tempat jemuran': 't3-q3-tempat',
-            Menjemur: 't3-q3-jemur',
-        },
-    },
-    '4.1': {
         scene: ['t4-q1-karyawisata', 'Bus karyawisata kelas di depan sekolah'],
         ikon: {
             'Menentukan tujuan': 't4-q1-tujuan',
@@ -67,8 +40,8 @@ const ILUS = {
             'Menyewa kendaraan': 't4-q1-kendaraan',
         },
     },
-    '4.2': { scene: ['t4-q2-jalur', 'Peta jalur perjalanan karyawisata'] },
-    '4.3': {
+    '3.2': { scene: ['t4-q2-jalur', 'Peta jalur perjalanan karyawisata'] },
+    '3.3': {
         scene: ['t4-q3-kue', 'Kue ulang tahun buatan sendiri'],
         ikon: {
             'Menyiapkan bahan': 't4-q3-bahan',
@@ -78,7 +51,8 @@ const ILUS = {
             'Mengganti wallpaper': 't4-q3-wallpaper',
         },
     },
-    '5.1': {
+    // Tahap 4: Pecah Sendiri (berkas t5-*).
+    '4.1': {
         scene: ['t5-q1-lomba', 'Lomba antarkelas di lapangan sekolah'],
         ikon: {
             'Menyusun jadwal dan aturan': 't5-q1-jadwal',
@@ -89,10 +63,39 @@ const ILUS = {
             'Membeli hadiah untuk diri sendiri': 't5-q1-hadiah',
         },
     },
-    // Berkas dipakai ulang dari soal 5.1.
-    '5.2': { zona: ['t5-q1-jadwal', 't5-q1-tempat', 't5-q1-panitia'] },
-    // shortcut: ikon 5.3 belum ada di disk (t5-q3-tulisan/tataletak/pasang/ponsel/cat/lagu), tambahkan saat PNG tersedia.
-    '5.3': { scene: ['t5-q3-mading', 'Majalah dinding kelas di dinding sekolah'] },
+    // Berkas zona dipakai ulang dari soal 4.1.
+    '4.2': { zona: ['t5-q1-jadwal', 't5-q1-tempat', 't5-q1-panitia'] },
+    // shortcut: ikon 4.3 belum ada di disk (t5-q3-tulisan/tataletak/pasang/ponsel/cat/lagu), tambahkan saat PNG tersedia.
+    '4.3': { scene: ['t5-q3-mading', 'Majalah dinding kelas di dinding sekolah'] },
+    // Tahap 5: Urutkan (berkas t3-*).
+    '5.1': {
+        scene: ['t3-q1-teh', 'Segelas teh manis panas di atas meja'],
+        ikon: {
+            'Merebus air': 't3-q1-rebus',
+            'Menuang air ke gelas': 't3-q1-tuang',
+            'Memasukkan teh dan gula ke gelas': 't3-q1-tehgula',
+            Mengaduk: 't3-q1-aduk',
+        },
+    },
+    '5.2': {
+        ikon: {
+            'Menentukan topik': 't3-q2-topik',
+            'Mencari bahan': 't3-q2-bahan',
+            'Menyusun slide': 't3-q2-slide',
+            'Menulis naskah': 't3-q2-naskah',
+            'Berlatih presentasi': 't3-q2-latihan',
+        },
+    },
+    '5.3': {
+        ikon: {
+            'Mengumpulkan pakaian kotor': 't3-q3-kumpul',
+            'Memisahkan pakaian': 't3-q3-pisah',
+            'Merendam dengan deterjen': 't3-q3-rendam',
+            Membilas: 't3-q3-bilas',
+            'Menyiapkan tempat jemuran': 't3-q3-tempat',
+            Menjemur: 't3-q3-jemur',
+        },
+    },
 };
 
 const kunciSoal = () => `${S.s + 1}.${S.q + 1}`;
