@@ -177,6 +177,7 @@ $.addEventListener('click', (ev) => {
     } else if (a === 'rank') return muatPeringkat();
     else if (a === 'go') {
         S = { v: 'play', s: i, q: 0, sk: [], hp: 3, combo: 0, bonus: 0 };
+        praMuat(i);
         rq();
     } else if (a === 'map') S = { v: 'map' };
     else if (a === 'cek') periksa(q);

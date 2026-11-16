@@ -23,8 +23,9 @@ const gaya = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m
 const baca = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
 cek('urutan skrip', skrip, [
-    'js/aset/soal.js',
-    'js/aset/tokoh.js',
+    'js/asset/soal.js',
+    'js/asset/tokoh.js',
+    'js/asset/ilustrasi.js',
     'js/inti.js',
     'js/game.js',
     'js/ui/soal.js',
@@ -103,6 +104,7 @@ const api = eval(
   mulai: (s, q) => { S = { v: 'play', s, q, sk: [], hp: 3, combo: 0, bonus: 0 }; rq(); },
   soal: () => Q(), rq, pecah, periksa, pohonSelesai,
   TOKOH, POSE, AV, GD, tokoh, adegan,
+  IMG, ILUS, srcGambar, adeganSoal,
   tema: () => tema, aturTema, kerangka,
   vol: () => ({ musik: volMusik, efek: volEfek }), aturVolume, musik, efek, bunyi,
   layar: { login: () => vLogin(), map: () => vMap(), play: () => vPlay(), hasil: () => vHasil(), piagam: () => vPiagam(), habis: () => vHabis(), rank: () => vRank(), modal: () => modalSuara() } })`,
@@ -125,6 +127,28 @@ api.STAGES.forEach((st, si) =>
     }),
 );
 cek(`semua ${api.STAGES.reduce((a, s) => a + s.qs.length, 0)} soal dirender`, rusak, 0);
+
+/* ===== 3a. Ilustrasi: berkas ada di disk, kunci ikon cocok dengan bank soal ===== */
+const berkasIlus = new Set();
+Object.values(api.ILUS).forEach((v) =>
+    [v.scene && v.scene[0], ...Object.values(v.ikon || {}), ...(v.zona || [])]
+        .filter(Boolean)
+        .forEach((b) => berkasIlus.add(b)),
+);
+cek(
+    'semua gambar ILUS ada di disk',
+    [...berkasIlus].filter((f) => !fs.existsSync(path.join(ROOT, api.srcGambar(f)))),
+    [],
+);
+
+const teksSoal = JSON.stringify(api.STAGES);
+cek(
+    'kunci ikon ILUS cocok dengan teks soal',
+    Object.values(api.ILUS)
+        .flatMap((v) => Object.keys(v.ikon || {}))
+        .filter((t) => !teksSoal.includes(`"${t}"`)),
+    [],
+);
 
 api.atur({ v: 'login' });
 pasti('layar masuk', rapi(api.layar.login()) && api.layar.login().includes('Pilih tokohmu'));

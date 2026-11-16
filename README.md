@@ -6,6 +6,7 @@ Permainan edukasi berbasis web untuk melatih **kemampuan dekomposisi** (memecah 
 
 - **5 tahap berurutan**: Kenali → Kelompokkan → Urutkan → Perbaiki → Pecah Sendiri.
 - **5 tipe soal**: pilihan ganda (`choice`), pilih banyak (`pick`), pengelompokan (`group`), pengurutan (`order`), dan pecah pohon (`split`).
+- **Ilustrasi per soal**: gambar adegan + ikon opsi/zona/node dari `js/asset/img/` (61 PNG; 6 ikon tahap 5.3 menyusul).
 - **3 tokoh** (Arlin, Yogi, Adsa) dengan proporsi identik (kepala 52, badan 120, kanvas 100×190).
 - **Tema terang/gelap** (default terang, opt-in gelap), tersimpan di `localStorage`.
 - **Audio**: musik latar `music_bg.mp3` (loop, volume 0–100%) + 3 SFX (`click_button`, `button_salah`, `win_sound`) dengan volume terpisah.
@@ -36,9 +37,11 @@ python -m http.server 8000
 │   ├── main.css            # layar main (soal, dock, nyawa, segmen)
 │   └── akhir.css           # hasil, habis, peringkat, konfeti, piagam
 ├── js/
-│   ├── aset/
+│   ├── asset/
 │   │   ├── soal.js         # bank soal STAGES (jangan ubah konten tanpa alasan)
 │   │   ├── tokoh.js        # ikon SVG, tokoh (Arlin/Yogi/Adsa), adegan hero
+│   │   ├── ilustrasi.js     # peta ILUS: gambar adegan, ikon opsi/zona/node
+│   │   ├── img/            # t1..t5/*.png (67 ilustrasi; 6 berkas 5.3 belum ada)
 │   │   └── music/          # music_bg.mp3, click_button.mp3, button_salah.mp3, win_sound.mp3
 │   ├── inti.js             # state global (P, S), audio, tema, AV/GD, store, confetti
 │   ├── game.js             # logika soal: pecah, periksa, tutup, lanjut, skor
@@ -52,7 +55,7 @@ python -m http.server 8000
 
 ### Urutan skrip (load-bearing)
 
-`soal.js` → `tokoh.js` → `inti.js` → `game.js` → `ui/soal.js` → `ui/layar.js` → `ui/gambar.js`
+`soal.js` → `tokoh.js` → `ilustrasi.js` → `inti.js` → `game.js` → `ui/soal.js` → `ui/layar.js` → `ui/gambar.js`
 
 `gambar.js` terakhir karena memanggil `draw()` pada load. Jangan ubah urutan.
 
@@ -99,6 +102,16 @@ python -m http.server 8000
 
 Endpoint: `POST` (log/skor) dan `GET ?aksi=peringkat` (top 10).
 
+## Ilustrasi soal
+
+- Semua dipetakan di `js/asset/ilustrasi.js` pada konstanta `ILUS`, berkunci `"tahap.soal"` (mulai 1).
+- Berkas PNG ada di `js/asset/img/t1..t5/`; `srcGambar()` menyusun subfolder dari awalan nama (`t3-q1-teh` → `img/t3/t3-q1-teh.png`).
+- Tiga jenis pemakaian: `scene` = gambar adegan di bawah judul soal, `ikon` = ikon opsi pick, kartu/slot order, dan node pohon, `zona` = ikon judul kotak pada soal group.
+- `praMuat(tahap)` memuat gambar satu tahap di belakang layar saat tombol mulai diklik.
+- Gambar yang gagal dimuat langsung dibuang lewat `onerror`, jadi permainan tetap jalan bila berkas hilang.
+- Soal refleksi (`x.4`) tidak memakai gambar. Ikon soal 5.3 menunggu 6 berkas `t5-q3-*` yang belum ada.
+- Menambah gambar: taruh PNG di folder tahapnya, tambah satu baris di `ILUS`. Tes memeriksa semua berkas ILUS ada di disk dan setiap kunci `ikon` cocok persis dengan teks di `soal.js`.
+
 ## Pengujian
 
 ```bash
@@ -106,7 +119,7 @@ node tests/cek.js          # suite uji (71 pemeriksaan)
 node --check js/**/*.js    # cek sintaks semua berkas JS
 ```
 
-Suite memuat semua skrip seperti browser (urutan sama) dan menguji: render semua 20 soal, 5 layar, 3 tokoh × 5 pose × 5 ekspresi, tema, audio (volume, batas 0–100, 3 berkas efek, loop musik), popup suara, piagam, mekanik pohon pecah, dll.
+Suite memuat semua skrip seperti browser (urutan sama) dan menguji: render semua 20 soal, 5 layar, 3 tokoh × 5 pose × 5 ekspresi, tema, audio (volume, batas 0–100, 3 berkas efek, loop musik), popup suara, piagam, ilustrasi soal, mekanik pohon pecah, dll.
 
 ## Konvensi & catatan pengembangan
 
@@ -120,5 +133,4 @@ Suite memuat semua skrip seperti browser (urutan sama) dan menguji: render semua
 
 ## Lisensi & kredit
 
-Proyek pendidikan. Audio dan aset milik proyek (lihat `js/aset/music/`).
-EOF
+Proyek pendidikan. Audio dan aset milik proyek (lihat `js/asset/music/` dan `js/asset/img/`).

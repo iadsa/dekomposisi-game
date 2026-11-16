@@ -533,4 +533,60 @@
         grid-template-columns: 60px 1fr auto;
     }
 }
-
+
+/* Ilustrasi soal (js/asset/ilustrasi.js) */
+.il-scene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 14px;
+    aspect-ratio: 5 / 2;
+    max-height: 140px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--blue-l);
+}
+.il-scene img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.il-ikon {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border: 2px solid var(--line);
+    border-radius: 8px;
+    padding: 2px;
+    background: #fff;
+    object-fit: contain;
+}
+.kartu .il-ikon {
+    width: 28px;
+    height: 28px;
+}
+.nd .il-ikon {
+    width: 30px;
+    height: 30px;
+}
+.opsi-isi,
+.zona-judul {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+.zona-judul {
+    gap: 8px;
+}
+.slot .tx {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+@media (min-width: 760px) {
+    .il-scene {
+        max-height: 200px;
+    }
+}

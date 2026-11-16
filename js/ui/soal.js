@@ -29,7 +29,7 @@ function areaSoal(q) {
                                 : ' no'
                             : ' on'
                         : '';
-                return `<button class="opsi kotak${st}" data-a="sel" data-i="${i}" aria-pressed="${pil}" ${kunci ? 'disabled' : ''}><span class="hrf">${pil ? ic('check', 18) : ''}</span><span>${esc(q.c[i])}</span></button>`;
+                return `<button class="opsi kotak${st}" data-a="sel" data-i="${i}" aria-pressed="${pil}" ${kunci ? 'disabled' : ''}><span class="hrf">${pil ? ic('check', 18) : ''}</span><span class="opsi-isi">${ikonDi(q.c[i])}<span>${esc(q.c[i])}</span></span></button>`;
             })
             .join('')}</div>`;
     if (q.t === 'group') {
@@ -46,7 +46,7 @@ function areaSoal(q) {
         }</div><div class="zonas">${q.g
             .map(
                 (g, gi) =>
-                    `<div class="zona${S.cur !== null && !kunci ? ' siap' : ''}" data-a="grp" data-drop="grp" data-i="${gi}" role="group" aria-label="${esc(g)}"><h4><span>${esc(g)}</span>${S.cur !== null && !kunci ? `<button class="taruh" data-a="grp" data-i="${gi}">Taruh di sini</button>` : ''}</h4><div class="isi">${S.o
+                    `<div class="zona${S.cur !== null && !kunci ? ' siap' : ''}" data-a="grp" data-drop="grp" data-i="${gi}" role="group" aria-label="${esc(g)}"><h4><span class="zona-judul">${zonaIkon(gi)}<span>${esc(g)}</span></span>${S.cur !== null && !kunci ? `<button class="taruh" data-a="grp" data-i="${gi}">Taruh di sini</button>` : ''}</h4><div class="isi">${S.o
                         .filter((i) => S.m[i] === gi)
                         .map(
                             (i) =>
@@ -63,14 +63,14 @@ function areaSoal(q) {
                 ? sisa
                       .map(
                           (i) =>
-                              `<button class="kartu" data-a="ord" data-drag="ord" data-i="${i}">${esc(q.c[i])}</button>`,
+                              `<button class="kartu" data-a="ord" data-drag="ord" data-i="${i}">${ikonDi(q.c[i])}<span>${esc(q.c[i])}</span></button>`,
                       )
                       .join('')
                 : '<span class="kosong">Semua langkah sudah disusun.</span>'
         }</div><ol class="urut drop" data-a="ordzone" data-drop="ord">${q.c
             .map((_, n) =>
                 S.seq[n] !== undefined
-                    ? `<li class="slot isi"><span class="no-u">${n + 1}</span><span class="tx">${esc(q.c[S.seq[n]])}</span></li>`
+                    ? `<li class="slot isi"><span class="no-u">${n + 1}</span><span class="tx">${ikonDi(q.c[S.seq[n]])}<span>${esc(q.c[S.seq[n]])}</span></span></li>`
                     : `<li class="slot"><span class="no-u">${n + 1}</span><span class="tx">${n === S.seq.length ? 'Langkah berikutnya taruh di sini' : ''}</span></li>`,
             )
             .join(
@@ -87,7 +87,7 @@ function cabang(n, p, akar) {
         opsi = n.o && opsiBenar(n),
         kelas = akar ? 'akar' : n.o ? (buk ? 'pecah-sdh' : 'besar') : '',
         tnd = n.o ? (buk ? ic('check', 18) : '') : '';
-    let h = `<div class="nd ${kelas}"><span class="tnd${n.o ? '' : ' dot'}">${tnd}</span><span class="teks">${esc(n.l)}</span>${n.o && !buk && !S.lock && S.pilih !== p ? `<button class="btn" data-a="sp" data-p="${p}">${ic('pecah', 18)}Pecah</button>` : ''}</div>`;
+    let h = `<div class="nd ${kelas}"><span class="tnd${n.o ? '' : ' dot'}">${tnd}</span>${akar ? '' : ikonDi(n.l)}<span class="teks">${esc(n.l)}</span>${n.o && !buk && !S.lock && S.pilih !== p ? `<button class="btn" data-a="sp" data-p="${p}">${ic('pecah', 18)}Pecah</button>` : ''}</div>`;
     if (buk)
         h += `<div class="anak" data-p="${p}">${opsi.kids.map((c, i) => `<div class="cb">${cabang(c, p + '.' + i)}</div>`).join('')}</div>`;
     else if (S.pilih === p && !S.lock)

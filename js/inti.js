@@ -82,7 +82,7 @@ aturTema(tema);
 
 /* ===== SUARA, KONFETI, DAN DRAG & DROP ===== */
 /* ===== SUARA: musik latar, efek dari berkas, dan nada sintetis ===== */
-const MEDIA = 'js/aset/music/';
+const MEDIA = 'js/asset/music/';
 const batas = (v, d) => (isNaN(parseFloat(v)) ? d : Math.max(0, Math.min(100, parseFloat(v))));
 let mute = store('pm_snd') === 'off',
     volMusik = batas(store('pm_vol_musik'), 30),
