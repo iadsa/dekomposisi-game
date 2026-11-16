@@ -190,6 +190,7 @@ Object.keys(api.TOKOH).forEach((k) =>
     ),
 );
 cek(`gambar ${Object.keys(api.TOKOH).length} tokoh x ${Object.keys(api.POSE).length} pose x ${EX.length} ekspresi`, gambarRusak, []);
+pasti('tokoh: mata dibungkus untuk animasi kedip', api.tokoh('arlin', { ex: 'netral', alt: '' }).includes('<g class="mata">'));
 cek('adegan hero utuh & ringkas', [api.adegan(false), api.adegan(true)].map(rapi), [true, true]);
 
 /* ===== 3c. Tema: terang bawaan, gelap bisa dipilih ===== */

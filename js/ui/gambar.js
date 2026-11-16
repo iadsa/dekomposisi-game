@@ -2,7 +2,8 @@
 /* --- Menggambar + gerak halus --- */
 const BERKERANGKA = ['map', 'rank'];
 let vTerakhir = null,
-    ucapTerakhir = '';
+    ucapTerakhir = '',
+    reaksiTerakhir = '';
 function gerak(sel, kf, opt) {
     if (kurangiGerak()) return;
     document
@@ -70,6 +71,26 @@ function draw() {
                 { duration: 200, easing: 'ease-out' },
             );
         ucapTerakhir = u;
+        // Pendamping bereaksi sekali tiap percobaan jawaban.
+        const reaksi = S.att + S.fs;
+        if (reaksi !== reaksiTerakhir && ['ok', 'try', 'no'].includes(S.fs))
+            gerak(
+                '.dock .pemandu',
+                S.fs === 'ok'
+                    ? [
+                          { transform: 'none' },
+                          { transform: 'translateY(-5px)' },
+                          { transform: 'none' },
+                      ]
+                    : [
+                          { transform: 'translateX(0)' },
+                          { transform: 'translateX(-4px)' },
+                          { transform: 'translateX(4px)' },
+                          { transform: 'none' },
+                      ],
+                { duration: 300, easing: 'ease-out' },
+            );
+        reaksiTerakhir = reaksi;
         if (S.geser) {
             gerak(
                 '.soal-area',

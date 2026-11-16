@@ -7,7 +7,7 @@ Permainan edukasi berbasis web untuk melatih **kemampuan dekomposisi** (memecah 
 - **5 tahap berurutan**: Kenali → Kelompokkan → Perbaiki → Pecah Sendiri → Urutkan.
 - **5 tipe soal**: pilihan ganda (`choice`), pilih banyak (`pick`), pengelompokan (`group`), pengurutan (`order`), dan pecah pohon (`split`).
 - **Ilustrasi per soal**: gambar adegan + ikon opsi/zona/node dari `js/asset/img/` (61 PNG; 6 ikon tahap 4.3 menyusul).
-- **3 tokoh** (Arlin, Yogi, Adsa) dengan proporsi identik (kepala 52, badan 120, kanvas 100×190).
+- **3 tokoh** (Arlin, Yogi, Adsa) dengan proporsi identik
 - **Tema terang/gelap** (default terang, opt-in gelap), tersimpan di `localStorage`.
 - **Audio**: musik latar `music_bg.mp3` (loop, volume 0–100%) + 3 SFX (`click_button`, `button_salah`, `win_sound`) dengan volume terpisah.
 - **Penghargaan (piagam)** setelah menyelesaikan seluruh tahap.
@@ -76,7 +76,7 @@ python -m http.server 8000
 - XP = `round(sum × 10) + bonus combo`.
 - Tahap terbuka jika tahap sebelumnya lulus (bintang ≥ 1).
 - Setelah semua 5 tahap lulus (tahap terakhir: **Urutkan**) → tombol "Ambil penghargaan" → layar piagam.
-- Progres lokal lama dimigrasikan sekali saat `pm_p` dimuat — lihat bagian *Migrasi progres dan riwayat tahap*.
+- Progres lokal lama dimigrasikan sekali saat `pm_p` dimuat — lihat bagian _Migrasi progres dan riwayat tahap_.
 
 ## Pengaturan suara (popup)
 
@@ -109,13 +109,13 @@ Susunan tahap pernah diubah: **Urutkan** dipindah dari posisi 3 ke posisi 5, seh
 
 Pemetaan indeks yang dipakai kode (`[indeks baru, indeks lama]`); hanya indeks yang benar-benar ada yang disalin:
 
-| Indeks baru | Tahap | Indeks lama |
-|---|---|---|
-| 0 | Kenali | 0 |
-| 1 | Kelompokkan | 1 |
-| 2 | Perbaiki | 3 |
-| 3 | Pecah Sendiri | 4 |
-| 4 | Urutkan | 2 |
+| Indeks baru | Tahap         | Indeks lama |
+| ----------- | ------------- | ----------- |
+| 0           | Kenali        | 0           |
+| 1           | Kelompokkan   | 1           |
+| 2           | Perbaiki      | 3           |
+| 3           | Pecah Sendiri | 4           |
+| 4           | Urutkan       | 2           |
 
 - `P.h` (`pm_p` di `localStorage`) menyimpan hasil **per indeks tahap 0-based**. Saat `pm_p` dimuat, `migrasiProgres()` di `js/inti.js` memetakan indeks lama ke baru **satu kali**, lalu menandai `P.v = 2` agar tidak dipetakan dua kali.
 - Karena hasil tiap tahap ikut pindah, `buka()` (tahap terbuka bila tahap sebelumnya lulus) tetap konsisten: pemain melanjutkan di tahap yang sama isinya, hanya nomor labelnya berubah.
@@ -129,13 +129,13 @@ Pemetaan indeks yang dipakai kode (`[indeks baru, indeks lama]`); hanya indeks y
 - Kunci mengikuti **nomor tahap baru**, sedangkan nama berkas dan foldernya tetap memakai penamaan lama. Contoh: kunci `5.1` (Urutkan) memakai `t3-q1-teh` di `img/t3/`.
 - `srcGambar()` menurunkan folder dari awalan nama berkas, bukan dari kunci (`t3-q1-teh` → `js/asset/img/t3/t3-q1-teh.png`).
 
-| Kunci `ILUS` | Tahap | Folder berkas |
-|---|---|---|
-| `1.x` | Kenali | `js/asset/img/t1/` |
-| `2.x` | Kelompokkan | `js/asset/img/t2/` |
-| `3.x` | Perbaiki | `js/asset/img/t4/` |
-| `4.x` | Pecah Sendiri | `js/asset/img/t5/` |
-| `5.x` | Urutkan | `js/asset/img/t3/` |
+| Kunci `ILUS` | Tahap         | Folder berkas      |
+| ------------ | ------------- | ------------------ |
+| `1.x`        | Kenali        | `js/asset/img/t1/` |
+| `2.x`        | Kelompokkan   | `js/asset/img/t2/` |
+| `3.x`        | Perbaiki      | `js/asset/img/t4/` |
+| `4.x`        | Pecah Sendiri | `js/asset/img/t5/` |
+| `5.x`        | Urutkan       | `js/asset/img/t3/` |
 
 - Tiga jenis pemakaian: `scene` = gambar adegan di bawah judul soal, `ikon` = ikon opsi pick, kartu/slot order, dan node pohon, `zona` = ikon judul kotak pada soal group.
 - `praMuat(tahap)` memuat gambar satu tahap di belakang layar saat tombol mulai diklik.
@@ -146,7 +146,7 @@ Pemetaan indeks yang dipakai kode (`[indeks baru, indeks lama]`); hanya indeks y
 ## Pengujian
 
 ```bash
-node tests/cek.js          # suite uji (77 pemeriksaan)
+node tests/cek.js          # suite uji (78 pemeriksaan)
 node --check js/**/*.js    # cek sintaks semua berkas JS
 ```
 

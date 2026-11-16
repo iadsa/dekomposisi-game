@@ -166,7 +166,7 @@ function wajah(w, ex) {
         w === 'yogi'
             ? `<g fill="rgba(255,255,255,.28)" stroke="${TINTA}" stroke-width="2"><circle cx="40" cy="42" r="8.6"/><circle cx="60" cy="42" r="8.6"/></g><path d="M48.6 41.5h2.8" stroke="${TINTA}" stroke-width="2"/>`
             : '';
-    return kacamata + ab + mata + hidung + mulut;
+    return kacamata + ab + '<g class="mata">' + mata + '</g>' + hidung + mulut;
 }
 
 // Isi SVG (tanpa pembungkus) supaya bisa ditempatkan di adegan lain dengan transform.
